@@ -1,93 +1,49 @@
 package com.socialmediaweb.socialmediaweb.entities;
 
-import java.time.LocalDate;
+import java.net.URL;
+import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+
+
 @Entity
-public class Users {
-	@Id
+@Getter
+@Setter
+@Table(name = "USERS_TBL")
+
+
+public class Users{
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int user_id;
-	private String first_name;
-	private String last_name;
+	
+	@Column(name = "username")
 	private String username;
+	
+	@Column(name = "first_name")
+	private String first_name;
+	
+	@Column(name = "last_name")
+	private String last_name;
+	
+	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "password")
 	private String password;
-	private String gender;
-	private LocalDate created_on;
 	
+	@Column(name = "profile_picture")
+	private URL profile_picture;
 	
+	@Column(name = "created_on")
+	private Date created_on;
 	
-	public Users(int user_id, String first_name, String last_name, String username, String email, String password,
-			String gender, LocalDate created_on) {
-		super();
-		this.user_id = user_id;
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.gender = gender;
-		this.created_on = created_on;
-	}
-	
-	public Users() {
 		
 	}
-	
-	@Override
-	public String toString() {
-		return "User [user_id=" + user_id + ", first_name=" + first_name + ", last_name=" + last_name + ", username="
-				+ username + ", email=" + email + ", password=" + password + ", gender=" + gender + "]";
-	}
-	public int getUser_id() {
-		return user_id;
-	}
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
-	public String getFirst_name() {
-		return first_name;
-	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
-	}
-	public String getLast_name() {
-		return last_name;
-	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public LocalDate getCreated_on() {
-		return created_on;
-	}
-	public void setCreated_on(LocalDate created_on) {
-		this.created_on = created_on;
-	}
-	
-	
-}
