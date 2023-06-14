@@ -30,8 +30,11 @@ public class AuthenticationService {
 		return repository.findById(id).orElse(null);
 	}
 	
-	public Users getUsersByUsername(String username) { 
-		return repository.findByName(username);
+	//maybe add a delete user later
+	
+	public Users updateUsers(Users users) {
+		Users existingUser = repository.findById(users.getId()).orElse(null);
+		return repository.save()
 	}
 	
 }
