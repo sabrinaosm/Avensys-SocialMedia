@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.socialmediaweb.socialmediaweb.entities.Users;
 
 public interface UserRepository extends JpaRepository<Users,Integer>{
-    Optional<Users> findByName(String username);
+	Users findByUsername(String username);
 	
 }

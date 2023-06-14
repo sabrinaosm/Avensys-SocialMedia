@@ -31,15 +31,25 @@ public class AuthenticationService {
 		return repository.findById(id).orElse(null);
 	}
 	//get user by username
-	public Users getUsersByName(String username) {
-		return repository.findByName(username).orElse(null);
-	}
+	//	public Users getUsersByName(String username) {
+	//		return repository.findByUsername(username).orElse(null);
+	//	}
 	
 	//delete
 	public String deleteUser(int id) {
 		repository.deleteById(id);
 		return "User deleted.";
 	}
+	
+	//authentication
+	public boolean authenticateUser(String username, String password) {
+        Users user = repository.findByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return true;
+        }
+        return false;
+    }
+	
 	
 	//update users
 	public Users updateUser(Users user) {
