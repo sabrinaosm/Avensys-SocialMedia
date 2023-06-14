@@ -34,18 +34,18 @@ public class PostController {
 		return service.getPosts();
 	}
 	
-	@GetMapping("/post/{id}")
-	public Post findPostById(@PathVariable int post_id) {
+	@GetMapping("/post/{post_id}")
+	public Post findPostById(@PathVariable("post_id") Integer post_id) {
 		return service.getPostById(post_id);
 	}
 	
-	@PutMapping("/updatePost")
+	@PutMapping("/update")
 	public Post updatePost(@RequestBody Post post) {
 		return service.updatePost(post);
 	}
 	
-	@DeleteMapping("/delete/{id}")
-	public String deletePost(int post_id) {
+	@DeleteMapping("/delete/{post_id}")
+	public String deletePost(@PathVariable("post_id") Integer post_id) {
 		return service.deletePost(post_id);
 	}
 }
