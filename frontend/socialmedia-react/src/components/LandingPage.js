@@ -13,6 +13,7 @@ function LandingPage() {
     }
 }, [isLoggedIn, navigate]);
 
+
   return (
     <div className="lp-container">
       <img src={require('../assets/home.png')} alt="Home Image" width={'500px'}/>
