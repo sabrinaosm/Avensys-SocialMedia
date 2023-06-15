@@ -21,12 +21,13 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/adduser", userDetails)
+    axios.post("http://localhost:8080/createuser", userDetails)
       .then((response) => {
         console.log(response.data);
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
+        console.error(error);
       });
   };
 
