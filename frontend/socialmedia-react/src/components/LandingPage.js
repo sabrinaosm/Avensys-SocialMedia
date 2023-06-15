@@ -1,9 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import "./css/LandingPage.css"
 import "../assets/home.png"
 
 function LandingPage() {
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+  useEffect(() => {
+    if (isLoggedIn) {
+        navigate('/feed');
+    }
+}, [isLoggedIn, navigate]);
+
   return (
     <div className="lp-container">
       <img src={require('../assets/home.png')} alt="Home Image" width={'500px'}/>

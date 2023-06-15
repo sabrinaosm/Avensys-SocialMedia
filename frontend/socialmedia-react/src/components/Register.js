@@ -4,6 +4,7 @@ import axios from 'axios'
 import './css/Register.css'
 
 function Register() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     first_name: '',
@@ -15,6 +16,7 @@ function Register() {
     created_on: new Date()
 
   });
+
 
   const handleChange = (e) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
@@ -30,6 +32,13 @@ function Register() {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/feed');
+    }
+  }, [isLoggedIn, navigate]);
+
 
 
   return (

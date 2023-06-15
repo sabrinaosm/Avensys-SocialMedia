@@ -27,7 +27,7 @@ function Navbar() {
           </a>
         </li>
         {
-          user.isAdmin = true ? (
+          user.admin ? (
             <li className='nav-item'>
               <a className='nav-link'>
                 <Link to="/admin">

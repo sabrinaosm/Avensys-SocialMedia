@@ -6,6 +6,9 @@ import Navbar from './Navbar';
 
 function Feed() {
   const user = JSON.parse(localStorage.getItem('user'));
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  const navigate = useNavigate();
+
   const [feed, setFeed] = useState([])
   const [post, setPost] = useState({
     content: '',
@@ -24,6 +27,10 @@ function Feed() {
 
   useEffect(() => {
     loadFeed();
+
+    if (!isLoggedIn) {
+      navigate("/")
+    }
   }, [])
 
   const loadFeed = async () => {
