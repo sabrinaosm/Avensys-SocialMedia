@@ -20,13 +20,15 @@ public class Users {
 	private String gender;
 	private String profile_picture;
 	private Date created_on;
+	private boolean isAdmin;
 	
 	public Users() {
-		
+		// By default user is not an Admin
+		this.isAdmin = false;
 	}
 	
 	public Users(int user_id, String username, String first_name, String last_name, String email, String password,
-			String gender, String profile_picture, Date created_on) {
+			String gender, String profile_picture, Date created_on, boolean isAdmin) {
 		super();
 		this.user_id = user_id;
 		this.username = username;
@@ -37,6 +39,7 @@ public class Users {
 		this.gender = gender;
 		this.profile_picture = profile_picture;
 		this.created_on = created_on;
+		this.isAdmin = isAdmin;
 	}
 
 	public int getUser_id() {
@@ -111,11 +114,19 @@ public class Users {
 		this.created_on = created_on;
 	}
 
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return "Users [user_id=" + user_id + ", username=" + username + ", first_name=" + first_name + ", last_name="
 				+ last_name + ", email=" + email + ", password=" + password + ", gender=" + gender
-				+ ", profile_picture=" + profile_picture + ", created_on=" + created_on + "]";
+				+ ", profile_picture=" + profile_picture + ", created_on=" + created_on + ", isAdmin=" + isAdmin + "]";
 	}
 	
 }

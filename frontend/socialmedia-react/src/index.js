@@ -4,11 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { userStore } from './redux.js';
 import './style.css'
+// Components
 import LandingPage from './components/LandingPage'
 import Login from './components/Login'
 import Register from './components/Register'
 import Users from './components/Users'
 import Feed from './components/Feed';
+import Admin from './components/Admin.js';
 
 function App() {
     return (
@@ -19,6 +21,7 @@ function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/users' element={<Users />} />
                 <Route path='/feed' element={<Feed />} />
+                <Route path='/admin' element={<Admin />} />
             </Routes>
         </Router>
     )

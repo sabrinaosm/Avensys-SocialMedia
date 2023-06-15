@@ -25,6 +25,9 @@ function Users() {
                         <th scope="col">Email</th>
                         <th scope="col">Gender</th>
                         <th scope="col">Created On</th>
+                        <th scope="col">Role</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +41,13 @@ function Users() {
                                 <td>{i.email}</td>
                                 <td>{i.gender}</td>
                                 <td>{i.created_on}</td>
+                                <td>
+                                    {
+                                        i.admin ? (<p>Admin</p>) : (<p>User</p>)
+                                    }
+                                </td>
+                                <td><button>Delete</button></td>
+                                <td><button>Edit</button></td>
                             </tr>
                         ))
                     }

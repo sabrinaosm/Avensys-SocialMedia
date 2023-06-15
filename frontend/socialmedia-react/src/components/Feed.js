@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/Feed.css'
+import Navbar from './Navbar';
 
 function Feed() {
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log(user)
-  console.log(localStorage.getItem('isLoggedIn'))
-  const navigate = useNavigate();
   const [feed, setFeed] = useState([])
   const [post, setPost] = useState({
     content: '',
@@ -23,12 +20,7 @@ function Feed() {
     image: null,
     created_on: new Date(),
     user: user
-  })
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    navigate('/')
-  }
+  });
 
   useEffect(() => {
     loadFeed();
@@ -96,74 +88,69 @@ function Feed() {
     }
   };
 
-
   return (
-    <div>
-      <nav className='navbar'>
-        <a href='#'><img src={require("../assets/logo.png")} width={'30px'} /></a>
-        <ul className='navbar-nav'>
-          <li className='nav-item'>
-            <a className='nav-link' href="#">@{user.username}</a>
-          </li>
-          <li className='nav-item'>
-            <a className='nav-link' onClick={handleLogout} id='logout-btn'>Logout</a>
-          </li>
-        </ul>
-      </nav>
+    <div className='container'>
+      <Navbar />
+      <div className='create-post'>
+        <form method='POST'>
+          <textarea name='content' id='content' onChange={handleChange} value={post.content} className='form-control' cols='10' rows='4' placeholder='Create a post here!' />
+          <button onClick={handleSubmit} className="btn">Post</button>
+        </form>
 
-      <div className='container'>
+      </div>
 
-        <div className='create-post'>
-          <form method='POST'>
-            <textarea name='content' id='content' onChange={handleChange} value={post.content} className='form-control' cols='10' rows='4' placeholder='Create a post here!' />
-            <button onClick={handleSubmit} className="btn">Post</button>
-          </form>
+      <div className='posts'>
+        {feed.map((i) => (
+          <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
+            <b>{i.user.first_name} {i.user.last_name}</b><span>@{i.user.username}</span>
 
-        </div>
+            {
+              user.user_id === i.user.user_id || user.admin ?
+                (
+                  <div className='btngrp'>
+                    <a key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
+                      <i className="fi fi-rr-edit"></i>
+                    </a>
 
-        <div className='posts'>
-          {feed.map((i) => (
-            <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
-              <b>{i.user.first_name} {i.user.last_name}</b><span>@{i.user.username}</span>
-              <div className='btngrp'> 
-              <a key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
-                <i className="fi fi-rr-edit"></i>
-              </a>
+                    <a key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
+                      <i className="fi fi-rr-trash"></i>
+                    </a>
+                  </div>
+                ) : (null)
+            }
 
-              <a key = {i.post_id} onClick={()=>handleTrashClick(i.post_id)}><i class="fi fi-rr-trash"></i></a>
-              </div>
-              <p>{i.content}</p>
-              <small>{i.created_on}</small>
 
-              <div className="modal fade" id={`exampleModal${i.post_id}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${i.post_id}`} aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id={`exampleModalLabel${i.post_id}`}>Edit Post</h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div className="modal-body">
-                      <b>Your original post:</b>
-                      <p>{i.content}</p>
-                      <input type='number' onChange={handleUpdateChange} name='post_id' value={updatedPost.post_id} hidden />
-                      <textarea className='form-control' onChange={handleUpdateChange} name='content' value={updatedPost.content} style={{ border: '1px solid grey' }} />
-                      <p>editing: {i.post_id}</p>
-                    </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary" onClick={updatePost}>Save changes</button>
-                    </div>
+            <p>{i.content}</p>
+            <small>{i.created_on}</small>
+
+            <div className="modal fade" id={`exampleModal${i.post_id}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${i.post_id}`} aria-hidden="true">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id={`exampleModalLabel${i.post_id}`}>Edit Post</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <b>Your original post:</b>
+                    <p>{i.content}</p>
+                    <input type='number' onChange={handleUpdateChange} name='post_id' value={updatedPost.post_id} hidden />
+                    <textarea className='form-control' onChange={handleUpdateChange} name='content' value={updatedPost.content} style={{ border: '1px solid grey' }} />
+                    <p>editing: {i.post_id}</p>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" className="btn btn-primary" onClick={updatePost}>Save changes</button>
                   </div>
                 </div>
               </div>
-              {/* End of Modal */}
             </div>
-          ))}
-        </div>
-
+            {/* End of Modal */}
+          </div>
+        ))}
       </div>
+
     </div>
   )
 }

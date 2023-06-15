@@ -6,7 +6,8 @@ import '../assets/login.png'
 
 function Login() {
     const navigate = useNavigate();
-
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    
     const [userDetails, setUserDetails] = useState({
         username: '',
         password: ''
@@ -33,6 +34,12 @@ function Login() {
                 console.log(error.message);
             });
     };
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/feed');
+        }
+    }, [isLoggedIn, navigate]);
 
     return (
         <div className='lg-container'>
