@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100rem;
+    row-gap: 2rem;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5rem;
+}
+
+#logout-btn {
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
+
+#logout-btn:hover {
+    color: #0E4C94;
+    transition: 0.2s ease-in;
+}
+
+.create-post {
+    background-color: #F1F1F1;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.posts {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
+}
+
+.btn {
+    font-weight: bold;
+    width: 15rem;
+    float: right;
+    margin: 1rem 0rem .5rem 0rem;
+}
+
+.card {
+    padding: 1rem;
+    background-color: #F1F1F1;
+    border: none;
+}

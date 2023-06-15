@@ -1,0 +1,58 @@
+.container {
+    display: flex;
+    column-gap: 10rem;
+}
+
+.register-container {
+    width: 40rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    align-items: center;
+}
+
+.register-title {
+    text-align: center;
+}
+
+.register-body {
+    width: 20rem;
+}
+
+h1 {
+    font-weight: 200;
+    font-size: 60px;
+}
+
+.form-control {
+    padding: 10px;
+    border: none;
+}
+ 
+
+.custom-select, .custom-file-label {
+    border: none;
+    cursor: pointer;
+}
+
+.btn {
+    width: 100%;
+    background-color: #0E4C94;
+    color: #F1F1F1;
+}
+
+#register-subtext {
+    margin: 1rem 0rem 0rem 0rem;
+    text-align: center;
+}
+
+#login-small {
+    font-weight: bold;
+    color: black;
+}
+
+#login-small:hover {
+    color: #0E4C94;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
