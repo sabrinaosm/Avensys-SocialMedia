@@ -48,3 +48,8 @@
     background-color: #F1F1F1;
     border: none;
 }
+
+.btngrp{
+    display: flex;
+    column-gap: 1rem;
+}

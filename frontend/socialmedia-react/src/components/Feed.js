@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,6 +13,14 @@ function Feed() {
     created_on: new Date()
   })
 
+  const [updatedPost, setUpdatedPost] = useState({
+    post_id: '',
+    content: '',
+    image: null,
+    created_on: new Date(),
+    user: null
+  })
+
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/')
@@ -22,38 +30,73 @@ function Feed() {
     loadFeed();
   }, [])
 
-  const loadFeed = async() => {
-    const result = await axios.get("http://localhost:8080/feed");
-    setFeed(result.data)
+  const loadFeed = async () => {
+    try {
+      let response = await axios.get("http://localhost:8080/feed");
+      setFeed(response.data);
+    } catch (error) {
+      console.error(error.response.data)
+    }
   }
 
   const handleChange = (e) => {
-    setPost({...post, [e.target.name]: e.target.value});
+    setPost({ ...post, [e.target.name]: e.target.value });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post("http://localhost:8080/createpost", post)
-    .then((response) => {
-      console.log(response.data);
-      loadFeed();
-      document.getElementById('content').innerHTML = '';
-
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+      .then((response) => {
+        console.log(response.data);
+        document.getElementById('content').innerHTML = '';
+        loadFeed();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 
+  const handleUpdateChange = (e) => {
+    setUpdatedPost({ ...updatedPost, [e.target.name]: e.target.value });
+  }
+
+  const updatePost = (e) => {
+    console.log(updatedPost)
+    e.preventDefault();
+    axios.put("http://localhost:8080/updatepost", updatedPost)
+      .then((response) => {
+        setUpdatedPost(response.data);
+        loadFeed();
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
+  const handleTrashClick = (postId) => {
+    axios.delete(`http://localhost:8080/deletepost/${postId}`)
+      .then(response => {
+        console.log('Post deleted:', response.data);
+        loadFeed()
+      })
+      .catch(error => {
+        console.error('Error deleting post:', error);
+      });
+  }
+
+
   const handlePostClick = (postId) => {
-    console.log('Clicked Post ID:', postId);
+    const selectedPost = feed.find(post => post.post_id === postId);
+    if (selectedPost) {
+      setUpdatedPost({ ...selectedPost });
+    }
   };
 
 
   return (
     <div>
       <nav className='navbar'>
-        <a href='#'><img src={require("../assets/logo.png")} width={'30px'}/></a>
+        <a href='#'><img src={require("../assets/logo.png")} width={'30px'} /></a>
         <ul className='navbar-nav'>
           <li className='nav-item'>
             <a className='nav-link' href="#">@Username</a>
@@ -67,20 +110,58 @@ function Feed() {
       <div className='container'>
 
         <div className='create-post'>
-          <textarea name='content' id='content' onChange={handleChange} value={post.content} className='form-control' cols='10' rows='4' placeholder='Create a post here!' />
-          <button onClick={handleSubmit} className="btn">Post</button>
+          <form method='POST'>
+            <textarea name='content' id='content' onChange={handleChange} value={post.content} className='form-control' cols='10' rows='4' placeholder='Create a post here!' />
+            <button onClick={handleSubmit} className="btn">Post</button>
+          </form>
+
         </div>
 
         <div className='posts'>
-            {
-              feed.map((i) => (
-                <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
-                  <a><i class="fi fi-rr-trash"></i></a>
-                  <p>{i.content}</p>
-                  <small>{i.created_on}</small>
+          {feed.map((i) => (
+            <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
+              <div className='btngrp'> 
+              <a key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
+                <i className="fi fi-rr-edit"></i>
+              </a>
+
+              <a key = {i.post_id} onClick={()=>handleTrashClick(i.post_id)}><i class="fi fi-rr-trash"></i></a>
+              </div>
+              <p>{i.content}</p>
+              <small>{i.created_on}</small>
+
+              {/* Edit Button */}
+              
+              {/* <button type='button' className='btn btn-primary' data-toggle='modal' data-target={`#exampleModal${i.post_id}`}>Edit</button> */}
+              {/* Delete Button */}
+              {/* <button type='button' onClick={handleTrashClick} className='btn'>Delete</button> */}
+              {/* Modal */}
+              <div className="modal fade" id={`exampleModal${i.post_id}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${i.post_id}`} aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id={`exampleModalLabel${i.post_id}`}>Edit Post</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <b>Your original post:</b>
+                      <p>{i.content}</p>
+                      <input type='number' onChange={handleUpdateChange} name='post_id' value={updatedPost.post_id} hidden />
+                      <textarea className='form-control' onChange={handleUpdateChange} name='content' value={updatedPost.content} style={{ border: '1px solid grey' }} />
+                      <p>editing: {i.post_id}</p>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" className="btn btn-primary" onClick={updatePost}>Save changes</button>
+                    </div>
+                  </div>
                 </div>
-              ))
-            }
+              </div>
+              {/* End of Modal */}
+            </div>
+          ))}
         </div>
 
       </div>
