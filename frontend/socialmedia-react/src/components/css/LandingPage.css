@@ -1,9 +1,10 @@
-.container {
+.lp-container {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    column-gap: 5rem;
+    column-gap: 9rem;
+    margin-top: 10rem;
 }
 
 .landing-container {
@@ -24,7 +25,6 @@ span {
     margin: 2rem 0rem 0rem 0rem;
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
     width: 25rem;
 }
 

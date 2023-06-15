@@ -5,7 +5,7 @@ import "../assets/home.png"
 
 function LandingPage() {
   return (
-    <div className="container">
+    <div className="lp-container">
       <img src={require('../assets/home.png')} alt="Home Image" width={'500px'}/>
       <div className="landing-container">
         <h1 id='landing-h1'>Welcome to <br /><span>Echotopia!</span></h1>

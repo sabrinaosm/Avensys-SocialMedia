@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './css/Register.css'
 
 function Register() {
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     first_name: '',
     last_name: '',
@@ -23,18 +24,17 @@ function Register() {
     e.preventDefault();
     axios.post("http://localhost:8080/createuser", userDetails)
       .then((response) => {
-        console.log(response.data);
+        navigate('/login');
       })
       .catch((error) => {
-        // console.log(error.message);
         console.error(error);
       });
   };
 
 
   return (
-    <div className='container'>
-      <img src={require('../assets/register.png')} alt="register image" width={'390px'} />
+    <div className='rg-container'>
+      <img src={require('../assets/register.png')} alt="register image" />
       <div className='register-container'>
         <div className='register-title'>
           <h1>Registration</h1>
@@ -79,12 +79,12 @@ function Register() {
           </div>
 
           <button className='btn' onClick={handleSubmit}>Let's get started!</button>
-          <p id='register-subtext'>Already have an account?
-            <Link to='/login'>
-              <span id="login-small"> Log In</span>
-            </Link>
-          </p>
         </div>
+        <p id='register-subtext'>Already have an account?
+          <Link to='/login'>
+            <span id="login-small"> Log In</span>
+          </Link>
+        </p>
       </div>
     </div>
   )

@@ -20,15 +20,26 @@ import com.socialmediaweb.socialmediaweb.entities.Users;
 import com.socialmediaweb.socialmediaweb.service.AuthenticationService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = "Content-Type")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = "Content-Type")
 public class UserController {
 	@Autowired
 	AuthenticationService service;
 	
 	@PostMapping("/createuser")
-	public Users createUser(@RequestBody Users user) {
-		return service.saveUser(user);
-	}
+	public ResponseEntity<String> createUser(@RequestBody Users user) {
+		boolean isUsernameExists = service.isUsernameExists(user.getUsername());
+		boolean isEmailExists = service.isEmailExists(user.getEmail());
+		if (isUsernameExists) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is already in use.");
+		}
+		
+		if (isEmailExists) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already in use.");
+		}
+		
+		service.saveUser(user);
+		return ResponseEntity.ok("User has registered successfully!");
+	} 
 	
 	@PostMapping("/createusers")
 	public List<Users> createUsers(@RequestBody List<Users> users) {
@@ -64,7 +75,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password. Please try again.");    
         }
     }
-	
-	
-	
 }

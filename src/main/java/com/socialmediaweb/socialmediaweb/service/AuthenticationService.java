@@ -16,15 +16,15 @@ public class AuthenticationService {
         return repository.save(user);
     }
 
-	//save all posts
+	// Save all posts
 	public List<Users> saveUsers(List<Users> users) {
 		return repository.saveAll(users);
 	}
-	//get all users
+	// Get all users
 	public List<Users> getUsers(){
 		return repository.findAll();
 	}
-	//get user by id
+	// Get user by ID
 	public Users getUsersById(int id) { 
 		return repository.findById(id).orElse(null);
 	}
@@ -37,13 +37,13 @@ public class AuthenticationService {
 	//		return repository.findByName(username);
 	//	}
 
-	//delete
+	// Delete
 	public String deleteUser(int id) {
 		repository.deleteById(id);
 		return "User deleted.";
 	}
 	
-	//authentication
+	// Authentication
 	public boolean authenticateUser(String username, String password) {
         Users user = repository.findByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
@@ -53,7 +53,7 @@ public class AuthenticationService {
     }
 	
 	
-	//update users
+	// Update
 	public Users updateUser(Users user) {
 		Users existingUser = repository.findById(user.getUser_id()).orElse(null);
 		existingUser.setUsername(user.getUsername());
@@ -65,6 +65,14 @@ public class AuthenticationService {
 		existingUser.setProfile_picture(user.getProfile_picture());
 		return repository.save(existingUser);
 		
+	}
+	
+	public boolean isUsernameExists(String username) {
+		return repository.existsByUsername(username);
+	}
+	
+	public boolean isEmailExists(String email) {
+		return repository.existsByEmail(email);
 	}
 
 	

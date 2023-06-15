@@ -1,6 +1,10 @@
-.container {
+.rg-container {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     column-gap: 10rem;
+    margin-top: 7rem;
 }
 
 .register-container {
@@ -17,6 +21,8 @@
 
 .register-body {
     width: 20rem;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {

@@ -17,7 +17,7 @@ import com.socialmediaweb.socialmediaweb.entities.Post;
 import com.socialmediaweb.socialmediaweb.service.PostService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = "Content-Type")
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = "Content-Type")
 public class PostController {
 	@Autowired
 	private PostService service;

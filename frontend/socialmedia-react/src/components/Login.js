@@ -37,12 +37,12 @@ function Login() {
             });
     };
 
-    
+
 
     const isLoggedIn = localStorage.getItem('isLoggedIn');
 
     return (
-        <div className='container'>
+        <div className='lg-container'>
             <div>
                 <img src={require('../assets/login.png')} alt='login image' width={'300px'} />
             </div>
@@ -62,14 +62,12 @@ function Login() {
 
                         <button className='btn' onClick={handleSubmit}>Log In</button>
                     </form>
-                    <br />
-                    <p id='login-subtext'>Don't have an account?
-                        <Link to='/register'>
-                            <span id="register-small"> Sign Up</span>
-                        </Link>
-                    </p>
                 </div>
-
+                <p id='login-subtext'>Don't have an account?
+                    <Link to='/register'>
+                        <span id="register-small"> Sign Up</span>
+                    </Link>
+                </p>
             </div>
         </div>
     )
