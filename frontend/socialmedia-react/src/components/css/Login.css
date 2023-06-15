@@ -1,6 +1,10 @@
-.container {
+.lg-container {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     column-gap: 10rem;
+    margin-top: 10rem;
 }
 
 .login-container {
@@ -16,7 +20,8 @@
 }
 
 .login-body {
-    width: 20rem;
+    width:rem;
+    display: flex;
 }
 
 h1 {
@@ -30,7 +35,7 @@ h1 {
 }
 
 .btn {
-    width: 100%;
+    width: 50rem;
     background-color: #0E4C94;
     color: #F1F1F1;
     padding: 10px;
