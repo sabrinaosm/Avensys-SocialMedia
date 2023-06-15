@@ -23,14 +23,14 @@ function Register() {
   };
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
-    // axios.post("http://localhost:8080/createuser", userDetails)
-    //   .then((response) => {
-    //     navigate('/login');
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+    e.preventDefault();
+    axios.post("http://localhost:8080/createuser", userDetails)
+      .then((response) => {
+        navigate('/login');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     console.log(userDetails)
   };
 
