@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { getUsername } from '../redux.js'
 import axios from 'axios'
 import './css/Login.css'
 import '../assets/login.png'
 
 function Login() {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [userDetails, setUserDetails] = useState({
@@ -28,18 +25,14 @@ function Login() {
 
         axios.post("http://localhost:8080/login", params)
             .then((response) => {
-                dispatch(getUsername())
                 localStorage.setItem('isLoggedIn', true);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('/feed');
             })
             .catch((error) => {
                 console.log(error.message);
             });
     };
-
-
-
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
 
     return (
         <div className='lg-container'>

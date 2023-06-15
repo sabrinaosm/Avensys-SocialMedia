@@ -5,12 +5,16 @@ import axios from 'axios';
 import './css/Feed.css'
 
 function Feed() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user)
+  console.log(localStorage.getItem('isLoggedIn'))
   const navigate = useNavigate();
   const [feed, setFeed] = useState([])
   const [post, setPost] = useState({
     content: '',
     image: null,
-    created_on: new Date()
+    created_on: new Date(),
+    user: user
   })
 
   const [updatedPost, setUpdatedPost] = useState({
@@ -18,7 +22,7 @@ function Feed() {
     content: '',
     image: null,
     created_on: new Date(),
-    user: null
+    user: user
   })
 
   const handleLogout = () => {
@@ -99,7 +103,7 @@ function Feed() {
         <a href='#'><img src={require("../assets/logo.png")} width={'30px'} /></a>
         <ul className='navbar-nav'>
           <li className='nav-item'>
-            <a className='nav-link' href="#">@Username</a>
+            <a className='nav-link' href="#">@{user.username}</a>
           </li>
           <li className='nav-item'>
             <a className='nav-link' onClick={handleLogout} id='logout-btn'>Logout</a>
@@ -120,6 +124,7 @@ function Feed() {
         <div className='posts'>
           {feed.map((i) => (
             <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
+              <b>{i.user.first_name} {i.user.last_name}</b><span>@{i.user.username}</span>
               <div className='btngrp'> 
               <a key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
                 <i className="fi fi-rr-edit"></i>
@@ -130,12 +135,6 @@ function Feed() {
               <p>{i.content}</p>
               <small>{i.created_on}</small>
 
-              {/* Edit Button */}
-              
-              {/* <button type='button' className='btn btn-primary' data-toggle='modal' data-target={`#exampleModal${i.post_id}`}>Edit</button> */}
-              {/* Delete Button */}
-              {/* <button type='button' onClick={handleTrashClick} className='btn'>Delete</button> */}
-              {/* Modal */}
               <div className="modal fade" id={`exampleModal${i.post_id}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${i.post_id}`} aria-hidden="true">
                 <div className="modal-dialog" role="document">
                   <div className="modal-content">

@@ -67,12 +67,13 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        boolean isAuthenticated = service.authenticateUser(username, password);
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Correct user details!");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password. Please try again.");    
-        }
-    }
+	public ResponseEntity<Users> login(@RequestParam("username") String username, @RequestParam("password") String password) {
+	    Users user = service.authenticateUser(username, password);
+	    if (user != null) {
+	        return ResponseEntity.ok(user);
+	    } else {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+	    }
+	}
+
 }

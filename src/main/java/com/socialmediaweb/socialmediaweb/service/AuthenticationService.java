@@ -1,4 +1,5 @@
 package com.socialmediaweb.socialmediaweb.service;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,48 +12,41 @@ import com.socialmediaweb.socialmediaweb.repository.UserRepository;
 public class AuthenticationService {
 	@Autowired
 	private UserRepository repository;
-	
+
 	public Users saveUser(Users user) {
-        return repository.save(user);
-    }
+		return repository.save(user);
+	}
 
 	// Save all posts
 	public List<Users> saveUsers(List<Users> users) {
 		return repository.saveAll(users);
 	}
+
 	// Get all users
-	public List<Users> getUsers(){
+	public List<Users> getUsers() {
 		return repository.findAll();
 	}
+
 	// Get user by ID
-	public Users getUsersById(int id) { 
+	public Users getUsersById(int id) {
 		return repository.findById(id).orElse(null);
 	}
-	//get user by username
-	//	public Users getUsersByName(String username) {
-	//		return repository.findByUsername(username).orElse(null);
-	//	}
-	
-	//	public Users getUsersByUsername(String username) { 
-	//		return repository.findByName(username);
-	//	}
 
 	// Delete
 	public String deleteUser(int id) {
 		repository.deleteById(id);
 		return "User deleted.";
 	}
-	
+
 	// Authentication
-	public boolean authenticateUser(String username, String password) {
-        Users user = repository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
-        }
-        return false;
-    }
-	
-	
+	public Users authenticateUser(String username, String password) {
+		Users user = repository.findByUsername(username);
+		if (user != null && user.getPassword().equals(password)) {
+			return user;
+		}
+		return null;
+	}
+
 	// Update
 	public Users updateUser(Users user) {
 		Users existingUser = repository.findById(user.getUser_id()).orElse(null);
@@ -64,16 +58,15 @@ public class AuthenticationService {
 		existingUser.setGender(user.getGender());
 		existingUser.setProfile_picture(user.getProfile_picture());
 		return repository.save(existingUser);
-		
+
 	}
-	
+
 	public boolean isUsernameExists(String username) {
 		return repository.existsByUsername(username);
 	}
-	
+
 	public boolean isEmailExists(String email) {
 		return repository.existsByEmail(email);
 	}
 
-	
 }
