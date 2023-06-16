@@ -20,13 +20,18 @@ function Admin() {
         const { name, value } = e.target;
         setUpdatedUser((prevState) => ({
             ...prevState,
-            [name]: name === 'admin' ? value === 'true' : value,
+            [name]: name === 'admin' ? value === 'true' : value
         }));
+    };    
+    
+    const openEditModal = (user) => {
+        setUpdatedUser(user);
     };
 
 
     const updateUser = (e) => {
         e.preventDefault();
+        console.log(updatedUser)
         axios.put("http://localhost:8080/updateuser", updatedUser)
             .then((response) => {
                 setUpdatedUser(response.data);
@@ -37,24 +42,16 @@ function Admin() {
             })
     };
 
+
+
     useEffect(() => {
         loadUsers();
-        loadPosts();
     }, []);
 
     const loadUsers = async () => {
         try {
             const response = await axios.get('http://localhost:8080/users');
             setUsers(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const loadPosts = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/feed');
-            setPosts(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -108,7 +105,7 @@ function Admin() {
                                 </button>
                             </td>
                             <td>
-                                <button data-toggle="modal" data-target={`#exampleModal${user.user_id}`}>
+                                <button data-toggle="modal" data-target={`#exampleModal${user.user_id}`} onClick={() => openEditModal(user)}>
                                     Edit
                                 </button>
                             </td>
@@ -139,25 +136,28 @@ function Admin() {
                             </div>
                             <div className="modal-body">
                                 <h4>Editing User: <b>@{user.username}</b></h4>
+                                {/* User ID */}
+                                <input type="number" className="form-control" name="user_id" value={updatedUser.user_id} onChange={handleUpdateChange} hidden/>
+
                                 {/* First Name */}
                                 <div className="form-group">
-                                <label>First Name</label>
-                                    <input type="text" className="form-control" name="first_name" value={updatedUser.first_name} onChange={handleUpdateChange} placeholder={user.first_name}/>
+                                    <label>First Name</label>
+                                    <input type="text" className="form-control" name="first_name" value={updatedUser.first_name} onChange={handleUpdateChange} />
                                 </div>
                                 {/* Last Name */}
                                 <div className="form-group">
-                                <label>Last Name</label>
-                                    <input type="text" className="form-control" name="last_name" value={updatedUser.last_name} onChange={handleUpdateChange} placeholder={user.last_name}/>
+                                    <label>Last Name</label>
+                                    <input type="text" className="form-control" name="last_name" value={updatedUser.last_name} onChange={handleUpdateChange} />
                                 </div>
                                 {/* Username */}
                                 <div className="form-group">
-                                <label>Username</label>
-                                    <input type="text" className="form-control" name="username" value={updatedUser.username} onChange={handleUpdateChange} placeholder={user.username}/>
+                                    <label>Username</label>
+                                    <input type="text" className="form-control" name="username" value={updatedUser.username} onChange={handleUpdateChange} />
                                 </div>
                                 {/* Email */}
                                 <div className="form-group">
                                     <label>Email</label>
-                                    <input type="text" className="form-control" name="email" value={updatedUser.email} onChange={handleUpdateChange} placeholder={user.email}/>
+                                    <input type="text" className="form-control" name="email" value={updatedUser.email} onChange={handleUpdateChange} />
                                 </div>
                                 {/* Gender */}
                                 <div className="form-group">

@@ -22,10 +22,10 @@ function LandingPage() {
         <p>Explore, discover and make some new friends!</p>
         <div className="user-buttons">
           <Link to="/login">
-            <button className="btn" id='login-btn'>Log In</button>
+            <button id='login-btn'>Log In</button>
           </Link>
           <Link to="/register">
-            <button className="btn" id='register-btn'>Register</button>
+            <button id='register-btn'>Register</button>
           </Link>
           
         </div>
