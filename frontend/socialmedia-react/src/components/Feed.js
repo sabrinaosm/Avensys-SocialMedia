@@ -104,7 +104,6 @@ function Feed() {
             <i class="fi fi-rr-copy-image"></i>
             <button onClick={handleSubmit} className="post-btn">Post</button>
           </div>
-
         </form>
 
       </div>
@@ -116,31 +115,42 @@ function Feed() {
             : (
 
               feed.map((i) => (
-                <div className='card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
-                  <div className='content-user'>
-
+                <div className='post-card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
+                  <div className='img-content'>
+                    <img src={require("../assets/placeholder.png")} />
+                    <div className='content-user'>
+                      {/* Display user details */}
+                      <div className='user-details'>
+                        <b>{i.user.first_name} {i.user.last_name}</b>
+                        <span>@{i.user.username}</span>
+                      </div>
+                      <p>{i.content}</p>
+                    </div>                    
                   </div>
-                  <div className='user-details'>
-                    <b>{i.user.first_name} {i.user.last_name}</b>
-                    <span>@{i.user.username}</span>
-                  </div>
-                  <p>{i.content}</p>
-                  {
-                    // Check if the user logged in is either an admin or the post is made by the logged in user
-                    user.user_id === i.user.user_id || user.admin ?
-                      (
-                        <div className='post-action-btns'>
-                          <a key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
-                            <i className="fi fi-rr-edit"></i>
-                          </a>
 
-                          <a key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
-                            <i className="fi fi-rr-trash"></i>
-                          </a>
-                        </div>
-                      ) : (null)
-                  }
-                  <small>{i.created_on}</small>
+                  <div className='actions'>
+                    {
+                      // Check if the user logged in is either an admin or the post is made by the logged in user 
+                      user.user_id === i.user.user_id || user.admin ?
+                    (
+                    <div className="btn-group dropright">
+                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i className="fi fi-rr-square-plus"></i>
+                      </button>
+                      <div className="dropdown-menu">
+                        <a className="dropdown-item" key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
+                          <i className="fi fi-rr-edit"></i><span>Edit</span>
+                        </a>
+
+                        <a className="dropdown-item" key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
+                          <i className="fi fi-rr-trash"></i><span>Delete</span>
+                        </a>
+                      </div>
+                    </div>
+                    ) : (null)
+                    }
+                  </div>
+
                   {/* Start of Modal */}
                   <div className="modal fade" id={`exampleModal${i.post_id}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${i.post_id}`} aria-hidden="true">
                     <div className="modal-dialog" role="document">
@@ -168,9 +178,7 @@ function Feed() {
                   {/* End of Modal */}
                 </div>
               ))
-
             )
-
         }
 
       </div>

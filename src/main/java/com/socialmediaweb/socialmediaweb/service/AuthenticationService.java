@@ -11,9 +11,6 @@ import com.socialmediaweb.socialmediaweb.repository.UserRepository;
 public class AuthenticationService {
 	@Autowired
 	private UserRepository repository;
-	
-	@Autowired
-	private PostService postService;
 
 	public Users saveUser(Users user) {
 		return repository.save(user);
@@ -50,18 +47,17 @@ public class AuthenticationService {
 	}
 
 	// Update
-    public Users updateUser(Users user) {
-        Users existingUser = repository.findById(user.getUser_id()).orElse(null);
-        existingUser.setUsername(user.getUsername());
-        existingUser.setFirst_name(user.getFirst_name());
-        existingUser.setLast_name(user.getLast_name());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setGender(user.getGender());
-        existingUser.setProfile_picture(user.getProfile_picture());
-        existingUser.setAdmin(user.isAdmin());
-        return repository.save(existingUser);
-
+	public Users updateUser(Users user) {
+		Users existingUser = repository.findById(user.getUser_id()).orElse(null);
+		existingUser.setUsername(user.getUsername());
+		existingUser.setFirst_name(user.getFirst_name());
+		existingUser.setLast_name(user.getLast_name());
+		existingUser.setEmail(user.getEmail());
+		existingUser.setPassword(user.getPassword());
+		existingUser.setGender(user.getGender());
+		existingUser.setProfile_picture(user.getProfile_picture());
+		existingUser.setAdmin(user.isAdmin());
+		return repository.save(existingUser);
     }
 
 	public boolean isUsernameExists(String username) {
