@@ -11,9 +11,6 @@ import com.socialmediaweb.socialmediaweb.repository.UserRepository;
 public class AuthenticationService {
 	@Autowired
 	private UserRepository repository;
-	
-	@Autowired
-	private PostService postService;
 
 	public Users saveUser(Users user) {
 		return repository.save(user);
@@ -59,6 +56,7 @@ public class AuthenticationService {
 		existingUser.setPassword(user.getPassword());
 		existingUser.setGender(user.getGender());
 		existingUser.setProfile_picture(user.getProfile_picture());
+		existingUser.setAdmin(user.isAdmin());
 		return repository.save(existingUser);
 
 	}

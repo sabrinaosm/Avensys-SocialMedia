@@ -3,12 +3,27 @@
     flex-direction: column;
     width: 100rem;
     row-gap: 2rem;
+    
 }
 
-.navbar-nav {
+.post-card {
+    background-color: #F1F1F1;
+    padding: 1.5rem;
+    border-radius: 5px;
     display: flex;
-    flex-direction: row;
-    column-gap: 5rem;
+    column-gap: 2rem;
+    justify-content: space-between;
+}
+
+.img-content {
+    display: flex;
+    column-gap: 2rem;
+    align-items: center;
+}
+
+.user-details {
+    display: flex;
+    column-gap: 1rem;
 }
 
 #logout-btn {
@@ -64,6 +79,7 @@
     color:#F1F1F1;
     font-weight: bold;
     cursor: pointer;
+    border: none;
 }
 
 .post-btn:hover {
@@ -101,9 +117,4 @@
     display: flex;
     column-gap: 1rem;
     font-size: 1.2rem;
-}
-
-.user-details {
-    display: flex;
-    column-gap: 1rem;
 }
