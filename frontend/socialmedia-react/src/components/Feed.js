@@ -36,7 +36,8 @@ function Feed() {
   const loadFeed = async () => {
     try {
       let response = await axios.get("http://localhost:8080/feed");
-      setFeed(response.data);
+      const sortedFeed = response.data.sort((a, b) => new Date(b.created_on) - new Date(a.created_on));
+      setFeed(sortedFeed);
     } catch (error) {
       console.error(error.response.data)
     }
@@ -125,29 +126,28 @@ function Feed() {
                         <span>@{i.user.username}</span>
                       </div>
                       <p>{i.content}</p>
-                    </div>                    
+                    </div>
                   </div>
 
                   <div className='actions'>
                     {
                       // Check if the user logged in is either an admin or the post is made by the logged in user 
                       user.user_id === i.user.user_id || user.admin ?
-                    (
-                    <div className="btn-group dropright">
-                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i className="fi fi-rr-square-plus"></i>
-                      </button>
-                      <div className="dropdown-menu">
-                        <a className="dropdown-item" key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
-                          <i className="fi fi-rr-edit"></i><span>Edit</span>
-                        </a>
+                        (
+                          <div className="btn-group dropright">
+                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className='btn-action'>
+                              <i class="fi fi-bs-menu-dots"></i>                      </button>
+                            <div className="dropdown-menu">
+                              <a className="dropdown-item" key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
+                                <i className="fi fi-rr-edit"></i><span>Edit</span>
+                              </a>
 
-                        <a className="dropdown-item" key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
-                          <i className="fi fi-rr-trash"></i><span>Delete</span>
-                        </a>
-                      </div>
-                    </div>
-                    ) : (null)
+                              <a className="dropdown-item" key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
+                                <i className="fi fi-rr-trash"></i><span>Delete</span>
+                              </a>
+                            </div>
+                          </div>
+                        ) : (null)
                     }
                   </div>
 

@@ -25,6 +25,7 @@ span {
     margin: 2rem 0rem 0rem 0rem;
     display: flex;
     flex-direction: column;
+    row-gap: 1rem;
     width: 25rem;
 }
 
@@ -32,6 +33,11 @@ span {
     background-color: #0E4C94;
     color: #F1F1F1;
     font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    padding: 0.7rem;
+    width: 100%;
+    cursor: pointer;
 }
 
 #login-btn:hover {
@@ -45,6 +51,10 @@ span {
     border: 1px solid #0E4C94;
     color: #0E4C94;
     font-weight: 700;
+    border-radius: 5px;
+    padding: 0.7rem;
+    width: 100%;
+    cursor: pointer;
 }
 
 #register-btn:hover {
