@@ -68,4 +68,8 @@ public class AuthenticationService {
 		return repository.existsByEmail(email);
 	}
 
+	public Users findByUsername(String username) {
+		return repository.findByUsername(username);
+	}
+
 }

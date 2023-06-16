@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,10 +52,17 @@ public class UserController {
 		return service.getUsers();
 	}
 	
-	@GetMapping("/user/{user_id}")
-	public Users findUserById(@PathVariable("user_id") Integer user_id) {
-		return service.getUsersById(user_id);
+	@GetMapping("/users/search/{username}")
+	public ResponseEntity<?> findUserByUsername(@PathVariable("username") String username) {
+	    Users user = service.findByUsername(username);
+	    
+	    if (user == null) {
+	        return new ResponseEntity<>("No user found with username: " + username, HttpStatus.NOT_FOUND);
+	    }
+	    
+	    return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+
 	
 	@PutMapping("/updateuser")
 	public Users updateUser(@RequestBody Users user) {
@@ -65,6 +73,7 @@ public class UserController {
 	public String deleteUser(@PathVariable("user_id") Integer user_id) {
 		return service.deleteUser(user_id);
 	}
+	
 	
 	@PostMapping("/login")
 	public ResponseEntity<Users> login(@RequestParam("username") String username, @RequestParam("password") String password) {
