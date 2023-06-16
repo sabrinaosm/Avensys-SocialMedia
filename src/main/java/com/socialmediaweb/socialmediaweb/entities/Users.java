@@ -1,11 +1,14 @@
 package com.socialmediaweb.socialmediaweb.entities;
 
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Users {
@@ -21,6 +24,10 @@ public class Users {
 	private String profile_picture;
 	private Date created_on;
 	private boolean isAdmin;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Post> posts;
+	
 	
 	public Users() {
 		// By default user is not an Admin
