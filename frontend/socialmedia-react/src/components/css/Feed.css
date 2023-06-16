@@ -130,4 +130,15 @@
 
 .dropdown-item {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+}
+
+#edit-btn {
+    color: #0E4C94;
+}
+
+#del-btn {
+    color: rgb(212, 7, 7);
 }

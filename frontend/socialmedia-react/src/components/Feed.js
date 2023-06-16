@@ -25,6 +25,11 @@ function Feed() {
     user: user
   });
 
+  const detectLinks = (content) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`);
+  };
+
   useEffect(() => {
     loadFeed();
 
@@ -125,7 +130,8 @@ function Feed() {
                         <b>{i.user.first_name} {i.user.last_name}</b>
                         <span>@{i.user.username}</span>
                       </div>
-                      <p>{i.content}</p>
+                      <p dangerouslySetInnerHTML={{ __html: detectLinks(i.content) }}></p>
+                      <small>Posted on: {i.created_on}</small>
                     </div>
                   </div>
 
@@ -136,14 +142,15 @@ function Feed() {
                         (
                           <div className="btn-group dropright">
                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className='btn-action'>
-                              <i class="fi fi-bs-menu-dots"></i>                      </button>
+                              <i class="fi fi-bs-menu-dots"></i>
+                            </button>
                             <div className="dropdown-menu">
                               <a className="dropdown-item" key={i.post_id} data-toggle="modal" data-target={`#exampleModal${i.post_id}`}>
-                                <i className="fi fi-rr-edit"></i><span>Edit</span>
+                                <i className="fi fi-rr-edit"></i><span id='edit-btn'>Edit</span>
                               </a>
 
                               <a className="dropdown-item" key={i.post_id} onClick={() => handleTrashClick(i.post_id)}>
-                                <i className="fi fi-rr-trash"></i><span>Delete</span>
+                                <i className="fi fi-rr-trash"></i><span id='del-btn'>Delete</span>
                               </a>
                             </div>
                           </div>
