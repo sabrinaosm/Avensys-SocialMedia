@@ -7,7 +7,7 @@ import '../assets/login.png'
 function Login() {
     const navigate = useNavigate();
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    
+    const [error, setError] = useState('')
     const [userDetails, setUserDetails] = useState({
         username: '',
         password: ''
@@ -31,7 +31,12 @@ function Login() {
                 navigate('/feed');
             })
             .catch((error) => {
-                console.log(error.message);
+                if (error.response && error.response.status === 401) {
+                    setError('Invalid username and password.');
+                } else {
+                    console.log(error.message);
+
+                }
             });
     };
 
@@ -44,13 +49,15 @@ function Login() {
     return (
         <div className='lg-container'>
             <div>
-                <img src={require('../assets/login.png')} alt='login image' width={'300px'} />
+                <img src={require('../assets/login.png')} alt='login image' />
             </div>
             <div className='login-container'>
+
                 <div className='login-title'>
                     <h1>Login</h1>
                     <p>Welcome back! Log into your account here.</p>
                 </div>
+
                 <div className='login-body'>
                     <form>
                         <div className='form-group'>
@@ -58,16 +65,20 @@ function Login() {
                         </div>
                         <div className='form-group'>
                             <input type='password' id='password' name="password" onChange={handleChange} value={userDetails.password} placeholder='Password' className='form-control' />
+                            {error &&
+                                <div class="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            }
                         </div>
+                        <button id='lgn-btn' onClick={handleSubmit}>Log In</button>
 
-                        <button className='btn' onClick={handleSubmit}>Log In</button>
+                        
+
                     </form>
                 </div>
-                <p id='login-subtext'>Don't have an account?
-                    <Link to='/register'>
-                        <span id="register-small"> Sign Up</span>
-                    </Link>
-                </p>
+
+                <p id='login-subtext'>Don't have an account? <b><Link to='/register'> Sign Up</Link></b></p>
             </div>
         </div>
     )

@@ -1,0 +1,8 @@
+.navbar-nav .nav-link {
+    color: black;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link:hover {
+    text-decoration: none;
+}

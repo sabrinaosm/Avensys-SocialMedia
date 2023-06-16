@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-
+import './css/Navbar.css'
 function Navbar() {
   const user = JSON.parse(localStorage.getItem('user'));
 

@@ -1,18 +1,17 @@
 .lg-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    column-gap: 15rem;
     justify-content: center;
-    column-gap: 10rem;
+    align-items: center;
     margin-top: 10rem;
 }
 
 .login-container {
-    width: 40rem;
     display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
     align-items: center;
+    flex-direction: column;
+    row-gap: 2rem;
 }
 
 .login-title {
@@ -20,43 +19,31 @@
 }
 
 .login-body {
-    width:rem;
-    display: flex;
+    width: 20rem
 }
 
-h1 {
-    font-weight: 200;
-    font-size: 60px;
+.form-group {
+    border-radius: 10px;
+    width: 100%;
+    
 }
 
-.form-control {
-    padding: 10px;
+#lgn-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
     border: none;
-}
-
-.btn {
-    width: 50rem;
     background-color: #0E4C94;
-    color: #F1F1F1;
-    padding: 10px;
+    color: #f1f1f1;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.btn:hover {
-    background-color: #05274d;
+#lgn-btn:hover {
+    background-color: #0b305a;
     transition: 0.2s ease-in;
 }
 
-#login-subtext {
-    text-align: center;
-}
-
-#register-small {
-    font-weight: bold;
-    color: black;
-}
-
-#register-small:hover {
-    color: #0E4C94;
-    text-decoration: none;
-    transition: 0.2s ease-in-out;
+.alert {
+    margin: 1rem 0rem 1rem 0rem;
 }

@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.socialmediaweb.socialmediaweb.entities.Users;
 import com.socialmediaweb.socialmediaweb.repository.UserRepository;
-
 @Service
 public class AuthenticationService {
 	@Autowired
 	private UserRepository repository;
+	
+	@Autowired
+	private PostService postService;
 
 	public Users saveUser(Users user) {
 		return repository.save(user);
