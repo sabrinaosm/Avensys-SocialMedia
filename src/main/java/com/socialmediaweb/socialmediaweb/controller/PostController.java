@@ -1,8 +1,11 @@
 package com.socialmediaweb.socialmediaweb.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +14,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.socialmediaweb.socialmediaweb.entities.Post;
 import com.socialmediaweb.socialmediaweb.service.PostService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = "Content-Type")
 public class PostController {
 	@Autowired
 	private PostService service;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@PostMapping("/createpost")
 	public Post createPost(@RequestBody Post post) {
