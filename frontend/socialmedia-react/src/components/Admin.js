@@ -5,6 +5,9 @@ import axios from 'axios';
 function Admin() {
     const [posts, setPosts] = useState([]);
     const [users, setUsers] = useState([]);
+    const [display, setDisplay] = useState('home'); // 'home', 'users', 'posts'
+
+    
     const [updatedUser, setUpdatedUser] = useState({
         user_id: '',
         first_name: '',
@@ -16,6 +19,11 @@ function Admin() {
         admin: false
     })
 
+    
+    useEffect(() => {
+        loadUsers();
+        loadPosts();
+    }, []);
     const handleUpdateChange = (e) => {
         const { name, value } = e.target;
         setUpdatedUser((prevState) => ({
@@ -43,7 +51,6 @@ function Admin() {
     };
 
 
-
     useEffect(() => {
         loadUsers();
     }, []);
@@ -56,6 +63,16 @@ function Admin() {
             console.error(error);
         }
     };
+
+    const loadPosts = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/feed');
+            setPosts(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     const handleDeleteClick = (user_id) => {
         axios
@@ -71,7 +88,33 @@ function Admin() {
 
     return (
         <div className="container">
-            <h2>Admin Control</h2>
+         <h2>Admin Control</h2>
+            <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link active" onClick={() => setDisplay('home')}>Home</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" onClick={() => setDisplay('users')}>Users</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" onClick={() => setDisplay('posts')}>Posts</button>
+                </li>
+            </ul>
+            <div className="tab-content" id="pills-tabContent">
+                {display === 'home' && <div>Home Content</div>}
+                {display === 'users' && users.map((user) => (
+                    <div key={user.id}>
+                        <h3>{user.username}</h3>
+                        <p>{user.email}</p>
+                    </div>
+                ))}
+                {display === 'posts' && posts.map((post) => (
+                    <div key={post.id}>
+                        <h3>{post.content}</h3>
+                        <p>{post.image}</p>
+                    </div>
+                ))}
+            </div>
             <table className="table">
                 <thead>
                     <tr>
