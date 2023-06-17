@@ -71,5 +71,10 @@ public class AuthenticationService {
 	public Users findByUsername(String username) {
 		return repository.findByUsername(username);
 	}
+	
+	public List<String> findUsernamesBySearchTerm(String searchTerm) {
+	    return repository.findByUsernameContainingIgnoreCase(searchTerm);
+	}
+
 
 }

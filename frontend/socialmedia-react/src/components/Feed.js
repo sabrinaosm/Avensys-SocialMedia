@@ -119,6 +119,7 @@ function Feed() {
     } else {
       handlePostCreation(null);
     }
+    setMediaPreview(''); 
   };
 
   const handlePostCreation = (mediaURL) => {

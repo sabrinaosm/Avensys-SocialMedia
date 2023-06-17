@@ -1,59 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./css/Navbar.css"
 
 function Navbar() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState(null); // New state variable
+  const [autocompleteResults, setAutocompleteResults] = useState([]); // New state variable
+
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
     navigate('/')
   }
 
-  const [searchTerm, setSearchTerm] = useState("");
   const handleSearch = async (event) => {
     event.preventDefault();
     try {
       const response = await fetch(`http://localhost:8080/users/search/${searchTerm}`);
-      if (!response.ok) {
+      if (response.status === 200) {
+        const data = await response.json();
+        setSearchResult(true);
+        console.log(data);
+      } else if (response.status === 404) {
+        setSearchResult(false);
+      } else {
         console.log(`Response: ${response.status} ${response.statusText}`);
       }
-      const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.error(`Fetch error: ${error}`);
     }
   }
 
+  // Function to fetch autocomplete results when the search term changes
+  useEffect(() => {
+    const fetchAutocompleteResults = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/users/autocomplete/${searchTerm}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAutocompleteResults(data); // Set the autocomplete results
+          console.log(data); // Log the results to console
+        } else {
+          console.log(`Response: ${response.status} ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error(`Fetch error: ${error}`);
+      }
+    };
+    
+    if (searchTerm !== '') {
+      fetchAutocompleteResults();
+      
+    } else {
+      setAutocompleteResults([]); // Clear the results when the search term is empty
+    }
+  }, [searchTerm]); // This function runs whenever the search term changes
+
+
   return (
     <div>
       {
         user ? (
-          <nav className='navbar'>
-            <Link to='/'>
-              <a className='navbar-brand'>
-                <img src={require('../assets/echotopia.png')} height={'35px'} />
-              </a>
-            </Link>
+        <nav className='navbar'>
+            <a className='navbar-brand'>
+                <Link to='/'>
+                    <img src={require('../assets/echotopia.png')} height={'35px'} />
+                </Link>   
+            </a>
             <div className='nav'>
-              <form className="form-inline" onSubmit={handleSearch}>
-                <input className="form-control mr-sm-2"
-                  type="search"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  required
-                />
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-              <Link to={`/profile/${user.username}`} className='profile-navlink'>
-                {
-                  user.profile_picture ?
-                  (<img src={user.profile_picture} id="profile-picture-nav" />) :
-                  (<img src={require('../assets/placeholder.png')} id="profile-picture-nav" />)
-                }
-                
+                <div className="search-container">
+                    <form className="form-inline" onSubmit={handleSearch}>
+                        <input className="form-control mr-sm-2"
+                            type="search"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                    {searchTerm && (
+                        <div className="autocomplete-results">
+                            {autocompleteResults.map(user => (
+                                <p key={user}>{user}</p> // Render each autocomplete result
+                            ))}
+                        </div>
+                    )}
+                </div>
+                {searchResult === true && <p>User found</p>}
+                {searchResult === false && <p>Invalid user</p>} 
+              <Link to='/'>
                 <a>
                   @{user.username}
                 </a>

@@ -61,6 +61,12 @@ public class UserController {
 	    
 	    return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+	
+	@GetMapping("/users/autocomplete/{searchTerm}")
+	public List<String> autocompleteUsernames(@PathVariable("searchTerm") String searchTerm) {
+	    return service.findUsernamesBySearchTerm(searchTerm);
+	}
+
 
 	
 	@PutMapping("/updateuser")
