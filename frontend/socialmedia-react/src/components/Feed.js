@@ -5,7 +5,6 @@ import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL, listAll } from 'firebase/storage';
 import { v4 } from 'uuid';
 import './css/Feed.css'
-import Navbar from './Navbar';
 
 function Feed() {
   // Get logged in user information
@@ -14,45 +13,50 @@ function Feed() {
   const isLoggedIn = localStorage.getItem('isLoggedIn');
   const navigate = useNavigate();
 
-  // Image - Start
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imagePreview, setImagePreview] = useState('')
-  const handleImageUpload = (e) => {
+  // Media - Start
+  const [mediaUpload, setMediaUpload] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState('')
+
+  const handleMediaUpload = (e) => {
     const file = e.target.files[0];
-    setImageUpload(file);
-    previewImage(file);
+    setMediaUpload(file);
+    previewFile(file);
   }
 
-  const previewImage = (file) => {
+  const previewFile = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
-      setImagePreview(reader.result);
+      setMediaPreview(reader.result);
     };
-    reader.readAsDataURL(file);
-  }
+    if (file) {
+      if (file.type.includes("image")) {
+        reader.readAsDataURL(file);
+      } else if (file.type.includes("video")) {
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
-  const uploadImage = () => {
-    if (imageUpload == null) return;
+  const uploadMedia = () => {
+    if (mediaUpload == null) return;
     // Create a storage reference with a unique path for the image using v4
-    const imageRef = ref(storage, `post-images/${imageUpload.name + v4()} `);
-    uploadBytes(imageRef, imageUpload)
+    const mediaRef = ref(storage, `post-images/${mediaUpload.name + v4()} `);
+    uploadBytes(mediaRef, mediaUpload)
       .then(() => {
-        console.log("Image uploaded!");
-        getDownloadURL(imageRef)
+        getDownloadURL(mediaRef)
           .then((url) => {
-            console.log("Download URL:", url);
             handlePostCreation(url);
-            setImageUpload(null);
+            setMediaUpload(null);
           })
           .catch((error) => {
             console.error("Error retrieving download URL: ", error)
           })
       })
       .catch((error) => {
-        console.error("Error uploading image: ", error);
+        console.error("Error uploading media: ", error);
       });
   }
-  // Image - End
+  // Media - End
 
   // All Posts Data
   const [feed, setFeed] = useState([])
@@ -60,7 +64,7 @@ function Feed() {
   // Singular Post Data
   const [post, setPost] = useState({
     content: '',
-    image: null,
+    media: null,
     created_on: new Date(),
     user: user
   })
@@ -69,7 +73,7 @@ function Feed() {
   const [updatedPost, setUpdatedPost] = useState({
     post_id: '',
     content: '',
-    image: null,
+    media: '',
     created_on: new Date(),
     user: user
   });
@@ -110,15 +114,15 @@ function Feed() {
   // New Create Function - Start
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (imageUpload) {
-      uploadImage();
+    if (mediaUpload) {
+      uploadMedia();
     } else {
       handlePostCreation(null);
     }
   };
 
-  const handlePostCreation = (imageURL) => {
-    const newPost = { ...post, image: imageURL };
+  const handlePostCreation = (mediaURL) => {
+    const newPost = { ...post, media: mediaURL };
     axios.post('http://localhost:8080/createpost', newPost)
       .then((response) => {
         setPost({ ...post, content: '' });
@@ -164,7 +168,11 @@ function Feed() {
   }
   // Delete Function - End
 
-
+  // Handle Username Click -> Goes to User Profile
+  const handleUsernameClick = (username) => {
+    loadFeed(username);
+    navigate(`/profile/${username}`);
+  };
 
   return (
     <div className='container'>
@@ -181,15 +189,24 @@ function Feed() {
               required
             ></textarea>
           </div>
+          {/* Preview File: */}
           <div className='img-preview-section'>
-            {imagePreview && <img src={imagePreview} width={'300px'} className='img-preview'/>}
+            {mediaPreview && (
+              <div>
+                {mediaPreview.startsWith("data:image") ? (
+                  <img src={mediaPreview} width={'300px'} className='img-preview' />
+                ) : (
+                  <video src={mediaPreview} width={'300px'} className='img-preview' controls />
+                )}
+              </div>
+            )}
           </div>
+
           <div className='post-btn-grp'>
             <div className="custom-file">
-              <input type="file" className="custom-file-input" id="inputGroupFile" accept="image/*" onChange={handleImageUpload} />
+              <input type="file" className="custom-file-input" id="inputGroupFile" accept="image/*, video/*" onChange={handleMediaUpload} />
               <label className="custom-file-label">Add a photo!</label>
             </div>
-            {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
             <button type="submit" className="post-btn">
               Create Post
             </button>
@@ -208,18 +225,28 @@ function Feed() {
               feed.map((i) => (
                 <div className='post-card' key={i.post_id}>
                   <div className='img-content'>
-                    <img src={require("../assets/placeholder.png")} />
+                    {
+                      i.user.profile_picture ?
+                        (<img src={i.user.profile_picture} id="profile-picture" />) :
+                        (<img src={require('../assets/placeholder.png')} id="profile-picture" />)
+                    }
+
                     <div className='content-user'>
                       {/* Display user details */}
                       <div className='user-details'>
                         <b>{i.user.first_name} {i.user.last_name}</b>
-                        <span>@{i.user.username}</span>
+                        <Link to={`/profile/${i.user.username}`} onClick={handleUsernameClick}><span>@{i.user.username}</span></Link>
                       </div>
                       <div>
                         <p dangerouslySetInnerHTML={{ __html: detectLinks(i.content) }}></p>
-                        {
-                          i.image && <img src={i.image} width={'300px'} alt="Uploaded Image" />
-                        }
+                        {i.media && (
+                          i.media.startsWith("data:image") ? (
+                            <img src={i.media} width={'300px'} alt="Uploaded Media" />
+                          ) : (
+                            <video src={i.media} width={'300px'} controls />
+                          )
+                        )}
+
                       </div><br />
                       <small>Posted on: {i.created_on}</small>
                     </div>
@@ -259,11 +286,15 @@ function Feed() {
                           </button>
                         </div>
                         <div className="modal-body">
-                          <b>Your original post:</b>
+                          <b>Posted by: {i.user.first_name} {i.user.last_name} (@{i.user.username})</b><br />
+                          {
+                            i.media ?
+                              (<img src={i.media} width='200px' />) :
+                              (null)
+                          }
                           <p>{i.content}</p>
                           <input type='number' onChange={handleUpdateChange} name='post_id' value={updatedPost.post_id} hidden />
                           <textarea className='form-control' onChange={handleUpdateChange} name='content' value={updatedPost.content} style={{ border: '1px solid grey' }} />
-                          <p>editing: {i.post_id}</p>
                         </div>
                         <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>

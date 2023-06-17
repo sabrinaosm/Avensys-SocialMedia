@@ -1,8 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux'
-import { userStore } from './redux.js';
 import './style.css'
 // Components
 import LandingPage from './components/LandingPage'
@@ -12,6 +10,7 @@ import Users from './components/Users'
 import Feed from './components/Feed';
 import Admin from './components/Admin.js';
 import Navbar from './components/Navbar.js';
+import Profile from './components/Profile.js';
 
 function App() {
     return (
@@ -24,9 +23,10 @@ function App() {
                 <Route path='/users' element={<Users />} />
                 <Route path='/feed' element={<Feed />} />
                 <Route path='/admin' element={<Admin />} />
+                <Route path='/profile/:username' element={<Profile />} />
             </Routes>
         </Router>
     )
 }
 
-render(<Provider store={userStore}><App /></Provider>, document.getElementById('root'))
+render(<App />, document.getElementById('root'))

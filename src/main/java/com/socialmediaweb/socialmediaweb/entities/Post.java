@@ -15,7 +15,7 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int post_id;
 	private String content;
-	private String image;
+	private String media;
 	private Timestamp created_on;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -26,11 +26,11 @@ public class Post {
 	}
 
 
-	public Post(int post_id, String content, String image, Timestamp created_on, Users user) {
+	public Post(int post_id, String content, String media, Timestamp created_on, Users user) {
 		super();
 		this.post_id = post_id;
 		this.content = content;
-		this.image = image;
+		this.media = media;
 		this.created_on = created_on;
 		this.user = user;
 	}
@@ -52,12 +52,12 @@ public class Post {
 		this.content = content;
 	}
 
-	public String getImage() {
-		return image;
+	public String getMedia() {
+		return media;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setMedia(String image) {
+		this.media = image;
 	}
 
 	public Timestamp getCreated_on() {
@@ -81,7 +81,7 @@ public class Post {
 
 	@Override
 	public String toString() {
-		return "Post [post_id=" + post_id + ", content=" + content + ", image=" + image + ", created_on=" + created_on
+		return "Post [post_id=" + post_id + ", content=" + content + ", media=" + media + ", created_on=" + created_on
 				+ ", user=" + user + "]";
 	}
 	

@@ -20,7 +20,6 @@
 .img-content {
     display: flex;
     column-gap: 2rem;
-    align-items: center;
 }
 
 .user-details {
@@ -154,4 +153,12 @@
 .fi-sr-picture {
     color:#0E4C94;
     font-size: 1.8rem;
+}
+
+#profile-picture {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
 }

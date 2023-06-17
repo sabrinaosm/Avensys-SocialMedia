@@ -31,9 +31,11 @@ function Navbar() {
       {
         user ? (
           <nav className='navbar'>
-            <a className='navbar-brand'>
-              <img src={require('../assets/echotopia.png')} height={'35px'} />
-            </a>
+            <Link to='/'>
+              <a className='navbar-brand'>
+                <img src={require('../assets/echotopia.png')} height={'35px'} />
+              </a>
+            </Link>
             <div className='nav'>
               <form className="form-inline" onSubmit={handleSearch}>
                 <input className="form-control mr-sm-2"
@@ -41,22 +43,29 @@ function Navbar() {
                   placeholder="Search"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  required
                 />
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
               </form>
-              <Link to='/'>
+              <Link to={`/profile/${user.username}`} className='profile-navlink'>
+                {
+                  user.profile_picture ?
+                  (<img src={user.profile_picture} id="profile-picture-nav" />) :
+                  (<img src={require('../assets/placeholder.png')} id="profile-picture-nav" />)
+                }
+                
                 <a>
                   @{user.username}
                 </a>
               </Link>
-              <Link to='/'>
+              <Link to='/' className='nav-link'>
                 <a>
                   Home
                 </a>
               </Link>
               {
                 user.admin ?
-                  (<Link to='/admin'>
+                  (<Link to='/admin' className='nav-link'>
                     <a>
                       Admin
                     </a>
@@ -64,7 +73,7 @@ function Navbar() {
                   :
                   (null)
               }
-              <Link to='/'>
+              <Link to='/' className='nav-link'>
                 <a onClick={handleLogout}>
                   Logout
                 </a>
@@ -74,16 +83,18 @@ function Navbar() {
           </nav>
         ) : (
           <nav className='navbar'>
-            <a className='navbar-brand'>
-              <img src={require('../assets/echotopia.png')} height={'35px'} />
-            </a>
+            <Link to='/'>
+              <a className='navbar-brand'>
+                <img src={require('../assets/echotopia.png')} height={'35px'} />
+              </a>
+            </Link>
             <div className='nav'>
-              <Link to='/login'>
+              <Link to='/login' className='nav-link'>
                 <a>
                   Login
                 </a>
               </Link>
-              <Link to='/register'>
+              <Link to='/register' className='nav-link'>
                 <a>
                   Register
                 </a>

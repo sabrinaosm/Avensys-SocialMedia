@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL, listAll } from 'firebase/storage';
 import { v4 } from 'uuid';
 import './css/Register.css';
 
 function Register() {
+  const navigate = useNavigate()
   const [user, setUser] = useState({
     first_name: '',
     last_name: '',
@@ -79,6 +80,7 @@ function Register() {
     axios.post('http://localhost:8080/createuser', newUser)
       .then((response) => {
         setUser({ ...user, first_name: '', last_name: '', username: '', email: '', gender: '', password: '' });
+        navigate('/login')
       })
       .catch((error) => {
         console.error("Error creating user: ", error);
@@ -96,7 +98,8 @@ function Register() {
 
         <form onSubmit={handleSubmit}>
           <div className='img-preview'>
-            {imagePreview && <img src={imagePreview} id='dp-preview' />}
+            {imagePreview ? (<img src={imagePreview} id='dp-preview' />)
+            : (<img src={require('../assets/placeholder.png')} id='dp-preview'/>)}
           </div>
 
           <div className='form-group'>
@@ -121,7 +124,7 @@ function Register() {
           <div className='form-group'>
             <input type='text' name='email' onChange={handleChange} value={user.email} className='form-control' placeholder='Email' />
           </div>
-          
+
           <div className='form-group'>
             <select className="custom-select" name='gender' onChange={handleChange} value={user.gender}>
               <option selected value=''>Gender</option>
