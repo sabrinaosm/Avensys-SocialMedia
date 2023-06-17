@@ -32,3 +32,23 @@
     background-color: #0b305a;
     transition: 0.2s ease-in;
 }
+
+.img-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+
+#dp-preview {
+    width: 15rem;
+    height: 15rem;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+#small-login-btn:hover {
+    text-decoration: none;
+}

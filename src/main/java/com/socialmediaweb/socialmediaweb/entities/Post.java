@@ -1,6 +1,5 @@
 package com.socialmediaweb.socialmediaweb.entities;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;

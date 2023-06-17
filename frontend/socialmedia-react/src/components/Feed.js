@@ -42,6 +42,7 @@ function Feed() {
           .then((url) => {
             console.log("Download URL:", url);
             handlePostCreation(url);
+            setImageUpload(null);
           })
           .catch((error) => {
             console.error("Error retrieving download URL: ", error)
