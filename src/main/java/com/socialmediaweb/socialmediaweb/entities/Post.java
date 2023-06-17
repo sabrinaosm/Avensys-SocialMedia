@@ -1,6 +1,7 @@
 package com.socialmediaweb.socialmediaweb.entities;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ public class Post {
 	private int post_id;
 	private String content;
 	private String image;
-	private Date created_on;
+	private Timestamp created_on;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private Users user;
@@ -24,9 +25,9 @@ public class Post {
 	public Post() {
 		
 	}
-	
 
-	public Post(int post_id, String content, String image, Date created_on, Users user) {
+
+	public Post(int post_id, String content, String image, Timestamp created_on, Users user) {
 		super();
 		this.post_id = post_id;
 		this.content = content;
@@ -40,37 +41,32 @@ public class Post {
 		return post_id;
 	}
 
-
 	public void setPost_id(int post_id) {
 		this.post_id = post_id;
 	}
-
 
 	public String getContent() {
 		return content;
 	}
 
-
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 
 	public String getImage() {
 		return image;
 	}
 
-
 	public void setImage(String image) {
 		this.image = image;
 	}
 
-
-	public Date getCreated_on() {
+	public Timestamp getCreated_on() {
 		return created_on;
 	}
 
-	public void setCreated_on(Date created_on) {
+
+	public void setCreated_on(Timestamp created_on) {
 		this.created_on = created_on;
 	}
 
@@ -79,15 +75,17 @@ public class Post {
 		return user;
 	}
 
-
 	public void setUser(Users user) {
 		this.user = user;
 	}
 
+
+	@Override
+	public String toString() {
+		return "Post [post_id=" + post_id + ", content=" + content + ", image=" + image + ", created_on=" + created_on
+				+ ", user=" + user + "]";
+	}
 	
 	
 	
 }
-
-
-

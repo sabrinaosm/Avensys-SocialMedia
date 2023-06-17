@@ -11,10 +11,12 @@ import Register from './components/Register'
 import Users from './components/Users'
 import Feed from './components/Feed';
 import Admin from './components/Admin.js';
+import Navbar from './components/Navbar.js';
 
 function App() {
     return (
         <Router>
+            <Navbar />
             <Routes>
                 <Route path='/' element={<LandingPage />} />
                 <Route path='/register' element={<Register />} />

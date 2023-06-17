@@ -1,15 +1,62 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { storage } from '../firebase';
+import { ref, uploadBytes, getDownloadURL, listAll } from 'firebase/storage';
+import { v4 } from 'uuid';
 import './css/Feed.css'
 import Navbar from './Navbar';
 
 function Feed() {
+  // Get logged in user information
   const user = JSON.parse(localStorage.getItem('user'));
+  // Check the state of isLoggedIn
   const isLoggedIn = localStorage.getItem('isLoggedIn');
   const navigate = useNavigate();
 
+  // Image - Start
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState('')
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setImageUpload(file);
+    previewImage(file);
+  }
+
+  const previewImage = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const uploadImage = () => {
+    if (imageUpload == null) return;
+    // Create a storage reference with a unique path for the image using v4
+    const imageRef = ref(storage, `post-images/${imageUpload.name + v4()} `);
+    uploadBytes(imageRef, imageUpload)
+      .then(() => {
+        console.log("Image uploaded!");
+        getDownloadURL(imageRef)
+          .then((url) => {
+            console.log("Download URL:", url);
+            handlePostCreation(url);
+          })
+          .catch((error) => {
+            console.error("Error retrieving download URL: ", error)
+          })
+      })
+      .catch((error) => {
+        console.error("Error uploading image: ", error);
+      });
+  }
+  // Image - End
+
+  // All Posts Data
   const [feed, setFeed] = useState([])
+
+  // Singular Post Data
   const [post, setPost] = useState({
     content: '',
     image: null,
@@ -17,6 +64,7 @@ function Feed() {
     user: user
   })
 
+  // Update Singular Post Data
   const [updatedPost, setUpdatedPost] = useState({
     post_id: '',
     content: '',
@@ -25,6 +73,7 @@ function Feed() {
     user: user
   });
 
+  // Detect URL Links in Content
   const detectLinks = (content) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`);
@@ -38,36 +87,55 @@ function Feed() {
     }
   }, [])
 
+  // Retrieve Posts - Start
   const loadFeed = async () => {
     try {
       let response = await axios.get("http://localhost:8080/feed");
-      const sortedFeed = response.data.sort((a, b) => new Date(b.created_on) - new Date(a.created_on));
+      const sortedFeed = response.data.sort((a, b) => b.post_id - a.post_id);
       setFeed(sortedFeed);
     } catch (error) {
       console.error(error.response.data)
     }
   }
+  // Retrieve Posts - End
 
+  // Create: Handling Data - Start
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
   }
+  // Create: Handling Data - End
 
+
+  // New Create Function - Start
   const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post("http://localhost:8080/createpost", post)
+    e.preventDefault()
+    if (imageUpload) {
+      uploadImage();
+    } else {
+      handlePostCreation(null);
+    }
+  };
+
+  const handlePostCreation = (imageURL) => {
+    const newPost = { ...post, image: imageURL };
+    axios.post('http://localhost:8080/createpost', newPost)
       .then((response) => {
-        setPost({ ...post, content: '' })
+        setPost({ ...post, content: '' });
         loadFeed();
       })
       .catch((error) => {
-        console.log(error.message);
-      });
+        console.error(error);
+      })
   }
+  // New Create Function - End
 
+  // Update: Handling Data - Start
   const handleUpdateChange = (e) => {
     setUpdatedPost({ ...updatedPost, [e.target.name]: e.target.value });
   }
+  // Update: Handling Data - End
 
+  // Update Function - Start
   const updatePost = (e) => {
     console.log(updatedPost)
     e.preventDefault();
@@ -80,7 +148,9 @@ function Feed() {
         console.error(error);
       })
   }
+  // Update Function - End
 
+  // Delete Function - Start
   const handleTrashClick = (postId) => {
     axios.delete(`http://localhost:8080/deletepost/${postId}`)
       .then(response => {
@@ -91,29 +161,43 @@ function Feed() {
         console.error('Error deleting post:', error);
       });
   }
+  // Delete Function - End
 
 
-  const handlePostClick = (postId) => {
-    const selectedPost = feed.find(post => post.post_id === postId);
-    if (selectedPost) {
-      setUpdatedPost({ ...selectedPost });
-    }
-  };
 
   return (
     <div className='container'>
-      <Navbar />
-      <div className='create-post'>
-        <form method='POST'>
-          <textarea name='content' id='content' onChange={handleChange} value={post.content} className='form-control' cols='10' rows='4' placeholder='Create a post here!' />
+      {/* New Form - Start */}
+      <div className='card'>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <textarea
+              className="form-control"
+              name="content"
+              placeholder="What's on your mind?"
+              value={post.content}
+              onChange={handleChange}
+              required
+            ></textarea>
+          </div>
+          <div className='img-preview-section'>
+            {imagePreview && <img src={imagePreview} width={'300px'} className='img-preview'/>}
+          </div>
           <div className='post-btn-grp'>
-            <i class="fi fi-rr-copy-image"></i>
-            <button onClick={handleSubmit} className="post-btn">Post</button>
+            <div className="custom-file">
+              <input type="file" className="custom-file-input" id="inputGroupFile" accept="image/*" onChange={handleImageUpload} />
+              <label className="custom-file-label">Add a photo!</label>
+            </div>
+            {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
+            <button type="submit" className="post-btn">
+              Create Post
+            </button>
           </div>
         </form>
-
       </div>
+      {/* New Form - End */}
 
+      {/* Display Post - START */}
       <div className='posts'>
         {
           // Check if there are any posts made
@@ -121,7 +205,7 @@ function Feed() {
             : (
 
               feed.map((i) => (
-                <div className='post-card' key={i.post_id} onClick={() => handlePostClick(i.post_id)}>
+                <div className='post-card' key={i.post_id}>
                   <div className='img-content'>
                     <img src={require("../assets/placeholder.png")} />
                     <div className='content-user'>
@@ -130,7 +214,12 @@ function Feed() {
                         <b>{i.user.first_name} {i.user.last_name}</b>
                         <span>@{i.user.username}</span>
                       </div>
-                      <p dangerouslySetInnerHTML={{ __html: detectLinks(i.content) }}></p>
+                      <div>
+                        <p dangerouslySetInnerHTML={{ __html: detectLinks(i.content) }}></p>
+                        {
+                          i.image && <img src={i.image} width={'300px'} alt="Uploaded Image" />
+                        }
+                      </div><br />
                       <small>Posted on: {i.created_on}</small>
                     </div>
                   </div>

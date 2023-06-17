@@ -71,7 +71,6 @@ function Admin() {
 
     return (
         <div className="container">
-            <Navbar />
             <h2>Admin Control</h2>
             <table className="table">
                 <thead>

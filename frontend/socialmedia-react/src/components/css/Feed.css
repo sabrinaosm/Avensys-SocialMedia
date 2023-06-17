@@ -1,3 +1,5 @@
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
+
 .container {
     display: flex;
     flex-direction: column;
@@ -54,7 +56,7 @@
 .post-btn-grp {
     display: flex;
     align-items: center;
-
+    flex-direction: row;
     column-gap: 2rem;
     float: right;
 }
@@ -141,4 +143,15 @@
 
 #del-btn {
     color: rgb(212, 7, 7);
+}
+
+#upload-img-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.fi-sr-picture {
+    color:#0E4C94;
+    font-size: 1.8rem;
 }
