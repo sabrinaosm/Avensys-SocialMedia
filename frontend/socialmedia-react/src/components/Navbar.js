@@ -49,10 +49,10 @@ function Navbar() {
         console.error(`Fetch error: ${error}`);
       }
     };
-    
+
     if (searchTerm !== '') {
       fetchAutocompleteResults();
-      
+
     } else {
       setAutocompleteResults([]); // Clear the results when the search term is empty
     }
@@ -63,33 +63,41 @@ function Navbar() {
     <div>
       {
         user ? (
-        <nav className='navbar'>
+          <nav className='navbar'>
             <a className='navbar-brand'>
-                <Link to='/'>
-                    <img src={require('../assets/echotopia.png')} height={'35px'} />
-                </Link>   
+              <Link to='/'>
+                <img src={require('../assets/echotopia.png')} height={'35px'} />
+              </Link>
             </a>
             <div className='nav'>
-                <div className="search-container">
-                    <form className="form-inline" onSubmit={handleSearch}>
-                        <input className="form-control mr-sm-2"
-                            type="search"
-                            placeholder="Search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                    {searchTerm && (
-                        <div className="autocomplete-results">
-                            {autocompleteResults.map(user => (
-                                <p key={user}>{user}</p> // Render each autocomplete result
-                            ))}
-                        </div>
-                    )}
-                </div>
-                {searchResult === true && <p>User found</p>}
-                {searchResult === false && <p>Invalid user</p>} 
+              <div className="search-container">
+                <form className="form-inline" onSubmit={handleSearch}>
+                  <input className="form-control mr-sm-2"
+                    type="search"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                {searchTerm && (
+                  <div className="autocomplete-results">
+                    {autocompleteResults.map((user) => (
+                      <div>
+                        <Link className='autocomplete' to={`/profile/${user}`}>
+                          {user}
+                        </Link>
+                      </div>
+                      // <Link to={`/profile/${user.username}`} key={user.id}>
+                      //   <p key={user}>{user}</p> 
+                      //   </Link>
+                    ))}
+
+                  </div>
+                )}
+              </div>
+              {searchResult === true && <p>User found</p>}
+              {searchResult === false && <p>Invalid user</p>}
               <Link to='/'>
                 <a>
                   @{user.username}
