@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.socialmediaweb.socialmediaweb.entities.Post;
+import com.socialmediaweb.socialmediaweb.entities.Users;
+import com.socialmediaweb.socialmediaweb.repository.UserRepository;
 import com.socialmediaweb.socialmediaweb.service.PostService;
 
 import jakarta.persistence.EntityManager;
@@ -25,6 +27,15 @@ import jakarta.persistence.PersistenceContext;
 public class PostController {
 	@Autowired
 	private PostService service;
+	
+	@Autowired
+	private UserRepository userRepo;
+	
+	@GetMapping("/posts/user/{userId}")
+	public List<Post> getPostsByUser(@PathVariable Integer userId){
+		Users user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+		return service.getPostsByUser(user);
+	}
 	
 	@PersistenceContext
 	private EntityManager entityManager;

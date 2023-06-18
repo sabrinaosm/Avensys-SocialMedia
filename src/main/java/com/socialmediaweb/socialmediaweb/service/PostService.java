@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.socialmediaweb.socialmediaweb.entities.Post;
+import com.socialmediaweb.socialmediaweb.entities.Users;
 import com.socialmediaweb.socialmediaweb.repository.PostRepository;
 
 @Service
@@ -26,6 +27,10 @@ public class PostService {
 	// Get all posts
 	public List<Post> getPosts() {
 		return repository.findAll();
+	}
+	
+	public List<Post> getPostsByUser(Users user){
+		return repository.findByUser(user);
 	}
 	
 	// Get Post by Id
