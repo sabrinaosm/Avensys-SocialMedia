@@ -4,7 +4,7 @@ import './css/Profile.css';
 import { useParams } from 'react-router';
 
 function Profile() {
-  const loggedInUser = JSON.parse(localStorage.getItem('user'));
+
   const [feed, setFeed] = useState([])
   const [user, setUser] = useState([])
   const { username } = useParams();
@@ -23,7 +23,9 @@ function Profile() {
   const loadFeed = async () => {
     try {
       let response = await axios.get("http://localhost:8080/feed");
-      setFeed(response);
+      const sortedFeed = response.data.sort((a, b) => b.post_id - a.post_id);
+      const userPosts = sortedFeed.filter((post) => post.user.user_id === user.user_id);
+      setFeed(userPosts);
     } catch (error) {
       console.error(error.response.data)
     }
@@ -56,15 +58,13 @@ function Profile() {
             </div>
           </div>
         </div>
-        {
-          user.user_id == loggedInUser.user_id ?
-            (<button className='btn btn-primary'>Edit Profile</button>)
-            : (null)
-        }
+        <button className='btn btn-primary'>Edit Profile</button>
+      </div>
+      <div className='card'>
+          
 
       </div>
 
-      {/* Display all posts from this user: */}
     </div>
   )
 }
