@@ -14,17 +14,18 @@ function Profile() {
     try {
       const response = await axios.get(`http://localhost:8080/users/search/${username}`);
       setUser(response.data);
+      loadFeed(response.data.user_id); // Pass the user_id to loadFeed
     } catch (error) {
       console.error(error);
     };
   };
 
   // Retrieve Posts 
-  const loadFeed = async () => {
+  const loadFeed = async (userId) => { // Take userId as a parameter
     try {
       let response = await axios.get("http://localhost:8080/feed");
       const sortedFeed = response.data.sort((a, b) => b.post_id - a.post_id);
-      const userPosts = sortedFeed.filter((post) => post.user.user_id === user.user_id);
+      const userPosts = sortedFeed.filter((post) => post.user.user_id === userId); // Use the passed userId
       setFeed(userPosts);
     } catch (error) {
       console.error(error.response.data)
@@ -32,8 +33,7 @@ function Profile() {
   }
 
   useEffect(() => {
-    fetchUserData();
-    loadFeed();
+    fetchUserData(); // Now, no need to await loadFeed here
   }, [username])
 
   return (
@@ -60,8 +60,21 @@ function Profile() {
         </div>
         <button className='btn btn-primary'>Edit Profile</button>
       </div>
-      <div className='card'>
-          
+      <div className='feed'>
+        {feed.map((post) => (
+          <div className="post-card" key={post.post_id}>
+            <h2 className="post-title">{post.title}</h2>
+            <div className="post-content">
+              <p>{post.content}</p>
+              {post.image && <img src={post.image} className="post-image" />}
+              {post.video && <video src={post.video} className="post-video" controls />}
+            </div>
+            <hr />
+            <p className="post-date">{post.created_on}</p>
+          </div>
+        ))}
+
+
 
       </div>
 
