@@ -144,8 +144,8 @@ function Feed() {
   // Update Function
 
 
-  // Delete Function
-  const handleTrashClick = (postId) => {
+  // Post Delete Function
+  const handleDeletePostClick = (postId) => {
     axios.delete(`http://localhost:8080/deletepost/${postId}`)
       .then(response => {
         console.log('Post deleted:', response.data);
@@ -165,16 +165,41 @@ function Feed() {
       {/* Create Post Container */}
       <div className='create-post-container'>
         <form onSubmit={handlePostSubmit} className='post-form'>
-          <textarea className='form-control' placeholder='Create a new post!' name='content' value={post.content} onChange={handlePostChange} />
-          <div className="custom-file">
-            <input type="file" className="custom-file-input" id="inputGroupFile" accept="image/*" onChange={handleImageUpload} />
-            <label className="custom-file-label">Add a photo!</label>
+          <div className='create-dp'>
+            {
+              user.profile_picture ?
+                (<img src={user.profile_picture} id='post-profile-picture' />) :
+                (<img src={require('../assets/placeholder.png')} id='post-profile-picture' />)
+            }
           </div>
-          <div className="custom-file">
-            <input type="file" className="custom-file-input" id="inputGroupFile" accept="video/*" onChange={handleVideoUpload} />
-            <label className="custom-file-label">Add a video!</label>
+          <div className='form-group'>
+            <textarea className='form-control' placeholder='Create a new post!' name='content' value={post.content} onChange={handlePostChange} rows={'4'} style={{ 'border': 'none' }} />
+            <div className='media-preview'>
+              {mediaPreview && (
+                <div>
+                  {mediaPreview.startsWith("data:image") ? (
+                    <img src={mediaPreview} width={'300px'} className='img-preview' />
+                  ) : (
+                    <video src={mediaPreview} width={'300px'} className='img-preview' controls />
+                  )}
+                </div>
+              )}
+            </div>
+            <div className='create-post-buttons'>
+              <div className='file-input-buttons'>
+                <div className='image-upload'>
+                  <label for="image-file-input"><i class="fi fi-rs-graphic-style"></i></label>
+                  <input type="file" id="image-file-input" accept="image/*" onChange={handleImageUpload} />
+                </div>
+                <div className="video-upload">
+                  <label for="video-file-input"><i class="fi fi-rs-play-alt"></i></label>
+                  <input type="file" id="video-file-input" accept="video/*" onChange={handleVideoUpload} />
+                </div>
+              </div>
+
+              <button className='post-button' type='submit'>Create Post</button>
+            </div>
           </div>
-          <button className='btn btn-primary' type='submit'>Create Post</button>
         </form>
       </div>
 
@@ -216,42 +241,29 @@ function Feed() {
                   </div>
                 </div>
               </div>
-              <div class="btn-group dropright">
-                <button type="button" className='dropdown-btn' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i className="fi fi-rr-menu-dots"></i>
-                </button>
-                <div className="dropdown-menu">
-                  <button className="dropdown-item" type="button" key={post.post_id} onClick={() => { handleTrashClick(post.post_id) }}>
-                    <i className="fi fi-rr-trash"></i>
-                    <span className='delete-dropdown'>Delete</span>
-                  </button>
-                  <a className="dropdown-item edit" type="button" key={post.post_id} data-toggle="modal" data-target={`#exampleModal${post.post_id}`}>
-                    <i className="fi fi-rr-edit"></i>
-                    <span className='edit-dropdown'>Edit</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Modal for Update */}
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+              {
+                // Check if logged in user is an admin or the owner of the post displayed
+                user.isAdmin || user.user_id === post.user.user_id ?
+                  (<div class="btn-group dropright">
+                    <button type="button" className='dropdown-btn' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i className="fi fi-rr-menu-dots"></i>
+                    </button>
+                    <div className="dropdown-menu">
+                      {/* Delete Button */}
+                      <button className="dropdown-item" type="button" key={post.post_id} onClick={() => { handleDeletePostClick(post.post_id) }}>
+                        <i className="fi fi-rr-trash"></i>
+                        <span className='delete-dropdown'>Delete</span>
+                      </button>
+                      {/* Update Button */}
+                      <button className="dropdown-item" type="button">
+                        <i className="fi fi-rr-edit"></i>
+                        <span className='edit-dropdown'>Edit</span>
                       </button>
                     </div>
-                    <div class="modal-body">
-                      ...
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  </div>) :
+                  (null)
+              }
+
             </div>
           )))
         }

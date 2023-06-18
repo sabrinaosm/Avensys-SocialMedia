@@ -11,13 +11,61 @@
     padding: 2rem;
     background-color: #f1f1f1;
     border-radius: .4rem;
-    width: 80%;
+    width: 70%;
 }
 
 .post-form {
     display: flex;
+    flex-direction: row;
+    column-gap: 1rem;
+}
+
+.form-group {
+    display: flex;
     flex-direction: column;
     row-gap: 1rem;
+}
+
+.image-upload>input, .video-upload>input {
+    display: none;
+}
+
+.fi-rs-graphic-style, .fi-rs-play-alt {
+    font-size: 1.5rem;
+    color: #175295;
+    cursor: pointer;
+}
+
+.fi-rs-graphic-style:hover, .fi-rs-play-alt:hover {
+    color:#1c78e2;
+    transition: 0.2s ease-in;
+}
+
+.create-post-buttons {
+    display: flex;
+    column-gap: 1rem;
+    justify-content: space-between;
+}
+
+.post-button {
+    background-color: #175295;
+    color: #f1f1f1;
+    font-weight: bold;
+    border: none;
+    width: 20rem;
+    border-radius: .4rem;
+    cursor: pointer;
+    padding: .7rem;
+}
+
+.post-button:hover {
+    background-color: #0b2d54;
+    transition: 0.2s ease;
+}
+
+.file-input-buttons {
+    display: flex;
+    column-gap: 1rem;
 }
 
 .view-post-container {
@@ -26,7 +74,7 @@
     row-gap: 1rem;
     background-color: #e7e8ea;
     border-radius: .4rem;
-    width: 80%;
+    width: 70%;
     padding: 1rem;
 }
 

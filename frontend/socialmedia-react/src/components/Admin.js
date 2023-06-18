@@ -32,8 +32,8 @@ function Admin() {
 
     const [display, setDisplay] = useState('users');
 
-    // Delete Function
-    const handleTrashClick = (postId) => {
+    // Delete Post Function
+    const handleDeletePostClick = (postId) => {
         axios.delete(`http://localhost:8080/deletepost/${postId}`)
             .then(response => {
                 console.log('Post deleted:', response.data);
@@ -41,6 +41,18 @@ function Admin() {
             })
             .catch(error => {
                 console.error('Error deleting post:', error);
+            });
+    }
+
+    // Delete User Function
+    const handleDeleteUserClick = (userId) => {
+        axios.delete(`http://localhost:8080/deleteuser/${userId}`)
+            .then(response => {
+                console.log('User deleted:', response.data);
+                loadPosts();
+            })
+            .catch(error => {
+                console.error('Error User post:', error);
             });
     }
 
@@ -96,7 +108,21 @@ function Admin() {
                                     <td>{user.gender}</td>
                                     <td>{user.created_on}</td>
                                     <td>{user.admin = true ? (<p>Admin</p>) : (<p>User</p>)}</td>
-                                    <td><i class="fi fi-rr-menu-dots"></i></td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className='dropdown-btn'>
+                                            <i class="fi fi-rr-menu-dots"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button className="dropdown-item" type="button" key={user.user_id} onClick={() => { handleDeleteUserClick(user.user_id) }}>
+                                                <i className="fi fi-rr-trash"></i>
+                                                <span className='delete-dropdown'>Delete</span>
+                                            </button>
+                                            <a className="dropdown-item edit" type="button" key={user.user_id} data-toggle="modal" data-target={`#exampleModal${user.user_id}`}>
+                                                <i className="fi fi-rr-edit"></i>
+                                                <span className='edit-dropdown'>Edit</span>
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -150,7 +176,7 @@ function Admin() {
                                                 <i class="fi fi-rr-menu-dots"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <button className="dropdown-item" type="button" key={post.post_id} onClick={() => { handleTrashClick(post.post_id) }}>
+                                                <button className="dropdown-item" type="button" key={post.post_id} onClick={() => { handleDeletePostClick(post.post_id) }}>
                                                     <i className="fi fi-rr-trash"></i>
                                                     <span className='delete-dropdown'>Delete</span>
                                                 </button>

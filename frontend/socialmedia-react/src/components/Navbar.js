@@ -88,9 +88,6 @@ function Navbar() {
                           {user}
                         </Link>
                       </div>
-                      // <Link to={`/profile/${user.username}`} key={user.id}>
-                      //   <p key={user}>{user}</p> 
-                      //   </Link>
                     ))}
 
                   </div>
@@ -98,7 +95,14 @@ function Navbar() {
               </div>
               {searchResult === true && <p>User found</p>}
               {searchResult === false && <p>Invalid user</p>}
-              <Link to={`/profile/${user.username}`}>
+
+              <Link to={`/profile/${user.username}`} className='profile-picture-set'>
+                {
+                  user.profile_picture ? 
+                  (<img src={user.profile_picture} className="nav-profile-picture"/>) 
+                  : (<img src={require("../assets/placeholder.png")} className="nav-profile-picture"/>)
+                }
+                
                 <a>
                   @{user.username}
                 </a>
