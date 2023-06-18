@@ -1,6 +1,6 @@
 package com.socialmediaweb.socialmediaweb.entities;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,8 +15,9 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int post_id;
 	private String content;
-	private String media;
-	private Timestamp created_on;
+	private String image;
+	private String video;
+	private Date created_on;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private Users user;
@@ -25,16 +26,15 @@ public class Post {
 		
 	}
 
-
-	public Post(int post_id, String content, String media, Timestamp created_on, Users user) {
+	public Post(int post_id, String content, String image, String video, Date created_on, Users user) {
 		super();
 		this.post_id = post_id;
 		this.content = content;
-		this.media = media;
+		this.image = image;
+		this.video = video;
 		this.created_on = created_on;
 		this.user = user;
 	}
-
 
 	public int getPost_id() {
 		return post_id;
@@ -52,23 +52,29 @@ public class Post {
 		this.content = content;
 	}
 
-	public String getMedia() {
-		return media;
+	public String getImage() {
+		return image;
 	}
 
-	public void setMedia(String image) {
-		this.media = image;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
-	public Timestamp getCreated_on() {
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
+	public Date getCreated_on() {
 		return created_on;
 	}
 
-
-	public void setCreated_on(Timestamp created_on) {
+	public void setCreated_on(Date created_on) {
 		this.created_on = created_on;
 	}
-
 
 	public Users getUser() {
 		return user;
@@ -78,13 +84,10 @@ public class Post {
 		this.user = user;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Post [post_id=" + post_id + ", content=" + content + ", media=" + media + ", created_on=" + created_on
-				+ ", user=" + user + "]";
+		return "Post [post_id=" + post_id + ", content=" + content + ", image=" + image
+				+ ", video=" + video + ", created_on=" + created_on + ", user=" + user + "]";
 	}
-	
-	
 	
 }

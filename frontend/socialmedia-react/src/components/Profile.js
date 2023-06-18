@@ -19,9 +19,7 @@ function Profile() {
     };
   };
 
-  // Fetch user posts based on the username
-
-  // Retrieve Posts - Start
+  // Retrieve Posts 
   const loadFeed = async () => {
     try {
       let response = await axios.get("http://localhost:8080/feed");
