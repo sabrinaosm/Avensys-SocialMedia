@@ -98,7 +98,7 @@ function Navbar() {
               </div>
               {searchResult === true && <p>User found</p>}
               {searchResult === false && <p>Invalid user</p>}
-              <Link to='/'>
+              <Link to={`/profile/${user.username}`}>
                 <a>
                   @{user.username}
                 </a>
