@@ -43,7 +43,8 @@ public class PostService {
 	public Post updatePost(Post post) {
 		Post existingPost = repository.findById(post.getPost_id()).orElse(null);
 		existingPost.setContent(post.getContent());
-		existingPost.setMedia(post.getMedia());
+		existingPost.setImage(post.getImage());
+		existingPost.setVideo(post.getVideo());
 		return repository.save(existingPost);
 	}
 }
