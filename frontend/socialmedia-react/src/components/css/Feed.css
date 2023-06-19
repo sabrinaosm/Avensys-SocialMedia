@@ -20,6 +20,10 @@
     column-gap: 1rem;
 }
 
+textarea {
+    resize: none;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -80,6 +84,7 @@
 
 .post-card {
     padding: 1rem;
+    width: 100%;
     background-color: #f1f1f1;
     border-radius: .4rem;
     display: flex;
@@ -141,4 +146,21 @@
 
 .fi-rr-edit, .edit-dropdown {
     color: #0E4C94;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.update-form-buttons {
+    display: flex;
+    column-gap: 1rem;
 }

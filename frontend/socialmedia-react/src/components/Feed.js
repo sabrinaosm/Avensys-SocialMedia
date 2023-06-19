@@ -142,7 +142,42 @@ function Feed() {
   }
 
   // Update Function
+  const [updatedPost, setUpdatedPost] = useState({
+    post_id: '',
+    content: '',
+    image: '',
+    video: '',
+    created_on: new Date(),
+    user: user
+  });
 
+  const selectPostForEdit = (post) => {
+    setUpdatedPost({
+      post_id: post.post_id,
+      content: post.content,
+      image: post.image,
+      video: post.video,
+      created_on: post.created_on,
+      user: post.user
+    });
+  };
+
+  const handleUpdateChange = (e) => {
+    setUpdatedPost({ ...updatedPost, [e.target.name]: e.target.value })
+  };
+
+  const handleUpdateSubmit = (e) => {
+    console.log(updatedPost)
+    e.preventDefault();
+    axios.put("http://localhost:8080/updatepost", updatedPost)
+      .then((response) => {
+        setUpdatedPost(response.data);
+        loadFeed();
+      })
+      .catch((error) => {
+        console.error("Error updating post: ", error);
+      });
+  };
 
   // Post Delete Function
   const handleDeletePostClick = (postId) => {
@@ -156,9 +191,26 @@ function Feed() {
       });
   }
 
+  // Detect URL Links in Content
+  const detectLinks = (content) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`);
+  };
+
   useEffect(() => {
     loadFeed();
-  }, [])
+    setUpdatedPost({
+      post_id: post.post_id,
+      content: post.content,
+      image: post.image,
+      video: post.video,
+      created_on: new Date(),
+      user: user
+    });
+    if (!isLoggedIn) {
+      navigate("/")
+    }
+  }, [post])
 
   return (
     <div className='feed-container'>
@@ -236,14 +288,14 @@ function Feed() {
                         (<video src={post.video} width={'300px'} controls />) :
                         (null)
                     }
-                    <p>{post.content}</p>
+                    <p dangerouslySetInnerHTML={{ __html: detectLinks(post.content) }}></p>
                     <small>Posted on {post.created_on}</small>
                   </div>
                 </div>
               </div>
               {
                 // Check if logged in user is an admin or the owner of the post displayed
-                user.isAdmin || user.user_id === post.user.user_id ?
+                user.admin || user.user_id === post.user.user_id ?
                   (<div class="btn-group dropright">
                     <button type="button" className='dropdown-btn' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i className="fi fi-rr-menu-dots"></i>
@@ -255,7 +307,7 @@ function Feed() {
                         <span className='delete-dropdown'>Delete</span>
                       </button>
                       {/* Update Button */}
-                      <button className="dropdown-item" type="button">
+                      <button className="dropdown-item" type="button" data-toggle="modal" data-target={`#exampleModal${post.post_id}`} onClick={() => selectPostForEdit(post)}>
                         <i className="fi fi-rr-edit"></i>
                         <span className='edit-dropdown'>Edit</span>
                       </button>
@@ -263,7 +315,64 @@ function Feed() {
                   </div>) :
                   (null)
               }
-
+              {/* Modal for Update */}
+              <div class="modal fade" id={`exampleModal${post.post_id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLabel${post.post_id}`} aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Editing Post</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <b>Original Post:</b>
+                      <div className='post-user'>
+                        <div className='user-dp'>
+                          {
+                            post.user.profile_picture ?
+                              (<img src={post.user.profile_picture} id='post-profile-picture' />) :
+                              (<img src={require('../assets/placeholder.png')} id='post-profile-picture' />)
+                          }
+                        </div>
+                        <div className='user-content'>
+                          <div className='user-details'>
+                            <b>{post.user.first_name} {post.user.last_name}</b>
+                            <Link to={`/profile/${post.user.username}`}>
+                              <span>@{post.user.username}</span>
+                            </Link>
+                          </div>
+                          <div className='post-content'>
+                            {
+                              post.image ?
+                                (<img src={post.image} width={'300px'} />) :
+                                (null)
+                            }
+                            {
+                              post.video ?
+                                (<video src={post.video} width={'300px'} controls />) :
+                                (null)
+                            }
+                            <p dangerouslySetInnerHTML={{ __html: detectLinks(post.content) }}></p>
+                            <small>Posted on {post.created_on}</small>
+                          </div>
+                        </div>
+                      </div>
+                      <b>Editing Post:</b>
+                      <form className='update-form'>
+                        <input className='form-control' type='number' name='post_id' onChange={handleUpdateChange} value={updatedPost.post_id} hidden />
+                        <textarea className='form-control' type='text' name='content' onChange={handleUpdateChange} value={updatedPost.content} placeholder='Seems like there is no description. You may add a description to this post.' />
+                        <input className='form-control' type='text' name='image' onChange={handleUpdateChange} value={updatedPost.image} hidden />
+                        <input className='form-control' type='text' name='video' onChange={handleUpdateChange} value={updatedPost.video} hidden />
+                        <div className='update-form-buttons'>
+                          <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-outline-primary" onClick={handleUpdateSubmit} data-dismiss="modal">Save Changes</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )))
         }
