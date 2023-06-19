@@ -61,10 +61,10 @@ function Login() {
                 <div className='login-body'>
                     <form>
                         <div className='form-group'>
-                            <input type='text' id='username' name="username" onChange={handleChange} value={userDetails.username} placeholder='Username' className='form-control' />
+                            <input type='text' id='username' name="username" onChange={handleChange} value={userDetails.username} placeholder='Username' className='form-control' required />
                         </div>
                         <div className='form-group'>
-                            <input type='password' id='password' name="password" onChange={handleChange} value={userDetails.password} placeholder='Password' className='form-control' />
+                            <input type='password' id='password' name="password" onChange={handleChange} value={userDetails.password} placeholder='Password' className='form-control' required />
                             {error &&
                                 <div class="alert alert-danger" role="alert">
                                     {error}
