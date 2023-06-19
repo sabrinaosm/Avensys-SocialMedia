@@ -1,8 +1,6 @@
 .profile-container {
-    display: flex;
-    justify-content: center;
-    column-gap: 2rem;
-    margin-top: 3rem;
+  display: flex;
+  justify-content: center;
 }
 
 .profile-left {
