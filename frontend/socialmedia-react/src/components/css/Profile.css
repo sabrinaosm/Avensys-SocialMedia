@@ -4,9 +4,10 @@
 }
 
 .profile-left {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  margin-left: 20px;
 }
 
 #profile-dp {

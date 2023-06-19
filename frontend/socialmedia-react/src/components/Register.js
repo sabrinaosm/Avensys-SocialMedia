@@ -110,19 +110,19 @@ function Register() {
           </div>
 
           <div className='form-group'>
-            <input type='text' name='first_name' onChange={handleChange} value={user.first_name} className='form-control' placeholder='First Name' />
+            <input type='text' name='first_name' onChange={handleChange} value={user.first_name} className='form-control' placeholder='First Name' required />
           </div>
 
           <div className='form-group'>
-            <input type='text' name='last_name' onChange={handleChange} value={user.last_name} className='form-control' placeholder='Last Name' />
+            <input type='text' name='last_name' onChange={handleChange} value={user.last_name} className='form-control' placeholder='Last Name' required />
           </div>
 
           <div className='form-group'>
-            <input type='text' name='username' onChange={handleChange} value={user.username} className='form-control' placeholder='Username' />
+            <input type='text' name='username' onChange={handleChange} value={user.username} className='form-control' placeholder='Username' required />
           </div>
 
           <div className='form-group'>
-            <input type='text' name='email' onChange={handleChange} value={user.email} className='form-control' placeholder='Email' />
+            <input type='text' name='email' onChange={handleChange} value={user.email} className='form-control' placeholder='Email' required />
           </div>
 
           <div className='form-group'>

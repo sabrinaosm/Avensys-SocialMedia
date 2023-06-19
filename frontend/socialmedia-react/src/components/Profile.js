@@ -5,6 +5,12 @@ import { useParams } from 'react-router';
 
 function Profile() {
 
+  const [profile, setProfile] = useState({
+    username: '',
+    followers: Math.floor(Math.random() * 200),
+    following: Math.floor(Math.random() * 200),
+    // other profile data...
+  });
   const [feed, setFeed] = useState([])
   const [user, setUser] = useState([])
   const { username } = useParams();
@@ -51,10 +57,10 @@ function Profile() {
           <small>Joined {user.created_on}</small>
           <div className='ff-section'>
             <div className='following-section'>
-              <b>100</b><span> Following</span>
+              <b>{profile.followers}</b><span> Following</span>
             </div>
             <div className='followers-section'>
-              <b>123</b><span> Followers</span>
+              <b>{profile.following}</b><span> Followers</span>
             </div>
           </div>
         </div>
