@@ -79,7 +79,6 @@ public class UserController {
 		return service.deleteUser(user_id);
 	}
 	
-	
 	@PostMapping("/login")
 	public ResponseEntity<Users> login(@RequestParam("username") String username, @RequestParam("password") String password) {
 	    Users user = service.authenticateUser(username, password);
